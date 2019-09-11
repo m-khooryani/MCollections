@@ -24,6 +24,11 @@ namespace Indexed_DataStructures
             return this.tree.AddIfNotPresent(item);
         }
 
+        public void Remove(T item)
+        {
+            this.tree.Remove(item);
+        }
+
         public T this[int index]
         {
             get

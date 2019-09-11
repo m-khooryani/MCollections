@@ -199,6 +199,184 @@ namespace Indexed_DataStructures
             x.Count = x.Left.Count + x.Right.Count + 1;
         }
 
+        public void Transplant(Node<T> u, Node<T> v)
+        {
+            if (u.Parent.IsNil())
+            {
+                root = v;
+            }
+            else if (u == u.Parent.Left)
+            {
+                u.Parent.Left = v;
+            }
+            else
+            {
+                u.Parent.Right = v;
+            }
+            v.Parent = u.Parent;
+        }
+
+        public void Remove(T item)
+        {
+            Node<T> node = root;
+            while (!node.IsNil())
+            {
+                int c = this.comparer.Compare(item, node.Item);
+                if (c < 0)
+                {
+                    node = node.Left;
+                }
+                else if (c > 0)
+                {
+                    node = node.Right;
+                }
+                else
+                {
+                    Remove(node);
+                    return;
+                }
+            }
+        }
+
+        public void Remove(Node<T> z)
+        {
+            var y = z;
+            var yOriginalColor = y.Color;
+            Node<T> x;
+            if (z.Left.IsNil())
+            {
+                var temp = z;
+                while (!temp.IsNil())
+                {
+                    temp.Count--;
+                    temp = temp.Parent;
+                }
+                x = z.Right;
+                Transplant(z, z.Right);
+            }
+            else if (z.Right.IsNil())
+            {
+                var temp = z;
+                while (!temp.IsNil())
+                {
+                    temp.Count--;
+                    temp = temp.Parent;
+                }
+                x = z.Left;
+                Transplant(z, z.Left);
+            }
+            else
+            {
+                y = Minimum(z.Right);
+                var temp = y;
+                while (!temp.IsNil())
+                {
+                    temp.Count--;
+                    temp = temp.Parent;
+                }
+                y.Count = z.Count;
+                yOriginalColor = y.Color;
+                x = y.Right;
+                if (y.Parent == z)
+                {
+                    x.Parent = y;
+                }
+                else
+                {
+                    Transplant(y, y.Right);
+                    y.Right = z.Right;
+                    y.Right.Parent = y;
+                }
+                Transplant(z, y);
+                y.Left = z.Left;
+                y.Left.Parent = y;
+                y.Color = z.Color;
+            }
+            if (yOriginalColor == Color.BLACK)
+            {
+                DeleteBalance(x);
+            }
+        }
+
+        private void DeleteBalance(Node<T> x)
+        {
+            while(x!=root && x.IsBlack())
+            {
+                if (x == x.Parent.Left)
+                {
+                    var w = x.Parent.Right;
+                    if (w.IsRed())
+                    {
+                        w.MarkBlack();
+                        x.Parent.MarkRed();
+                        LeftRotate(x.Parent);
+                        w = x.Parent.Right;
+                    }
+                    if (w.Left.IsBlack() && w.Right.IsBlack())
+                    {
+                        w.MarkRed();
+                        x = x.Parent;
+                    }
+                    else
+                    {
+                        if (w.Right.IsBlack())
+                        {
+                            w.Left.MarkBlack();
+                            w.MarkRed();
+                            RightRotate(w);
+                            w = x.Parent.Right;
+                        }
+                        w.Color = x.Parent.Color;
+                        x.Parent.MarkBlack();
+                        w.Right.MarkBlack();
+                        LeftRotate(x.Parent);
+                        x = root;
+                    }
+                }
+                else
+                {
+                    var w = x.Parent.Left;
+                    if (w.IsRed())
+                    {
+                        w.MarkBlack();
+                        x.Parent.MarkRed();
+                        RightRotate(x.Parent);
+                        w = x.Parent.Left;
+                    }
+                    if (w.Right.IsBlack() && w.Left.IsBlack())
+                    {
+                        w.MarkRed();
+                        x = x.Parent;
+                    }
+                    else
+                    {
+                        if (w.Left.IsBlack())
+                        {
+                            w.Right.MarkBlack();
+                            w.MarkRed();
+                            LeftRotate(w);
+                            w = x.Parent.Left;
+                        }
+                        w.Color = x.Parent.Color;
+                        x.Parent.MarkBlack();
+                        w.Left.MarkBlack();
+                        RightRotate(x.Parent);
+                        x = root;
+                    }
+                }
+            }
+            x.MarkBlack();
+        }
+
+        private Node<T> Minimum(Node<T> node)
+        {
+            while (!node.Left.IsNil())
+            {
+                node = node.Left;
+            }
+            return node;
+        }
+
         public IEnumerator<T> DFS()
         {
             List<T> list = new List<T>();
@@ -208,7 +386,7 @@ namespace Indexed_DataStructures
 
         private void DFS(Node<T> node, List<T> list)
         {
-            if (node == null)
+            if (node.IsNil())
             {
                 return;
             }

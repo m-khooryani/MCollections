@@ -40,6 +40,11 @@ namespace Indexed_DataStructures
         {
             return this == NIL<T>.Instance;
         }
+
+        internal bool IsBlack()
+        {
+            return !this.IsRed();
+        }
     }
 
     internal enum Color : byte
