@@ -17,9 +17,19 @@ namespace Indexed_DataStructures
             this.tree = new Tree<T>(comparer);
         }
 
+        public int Count => this.tree.Count;
+
         public bool Add(T item)
         {
             return this.tree.AddIfNotPresent(item);
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                return this.tree.GetNthItem(index);
+            }
         }
 
         public IEnumerator<T> GetEnumerator()

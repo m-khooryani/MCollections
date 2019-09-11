@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Indexed_DataStructures
 {
     internal sealed class Tree<T>
     {
-        Node<T> root;
+        Node<T> root = NIL<T>.Instance;
         private IComparer<T> comparer;
         private int count;
 
@@ -13,39 +14,189 @@ namespace Indexed_DataStructures
             this.comparer = comparer;
         }
 
+        public int Count => this.root.Count;
+
         public bool AddIfNotPresent(T item)
         {
-            if (this.root == null)
+            var y = NIL<T>.Instance;
+            var x = this.root;
+            Node<T> z = new Node<T>(item);
+            z.Left = NIL<T>.Instance;
+            z.Right = NIL<T>.Instance;
+
+            int c;
+            while (!x.IsNil())
             {
-                this.root = new Node<T>(item);
-                this.count = 1;
-                return true;
-            }
-            Node<T> node = this.root;
-            Node<T> parent = this.root;
-            int x = 0;
-            while (node != null)
-            {
-                x = this.comparer.Compare(item, node.Item);
-                if (x == 0)
+                y = x;
+                c = this.comparer.Compare(z.Item, x.Item);
+                if (c == 0)
                 {
                     return false;
                 }
-                var temp = node;
-                node = x > 0 ? parent.Right : parent.Left;
-                parent = temp;
+                else if (c < 0)
+                {
+                    x = x.Left;
+                }
+                else
+                {
+                    x = x.Right;
+                }
             }
-            node = new Node<T>(item);
-            if (x > 0)
+            z.Parent = y;
+            if (y.IsNil())
             {
-                parent.Right = node;
+                this.root = z;
+            }
+            c = this.comparer.Compare(z.Item, y.Item);
+            if (c < 0)
+            {
+                y.Left = z;
             }
             else
             {
-                parent.Left = node;
+                y.Right = z;
             }
-            this.count++;
+            z.Left = NIL<T>.Instance;
+            z.Right = NIL<T>.Instance;
+            z.MarkRed();
+            var temp = z;
+            while (!temp.IsNil())
+            {
+                temp.Count++;
+                temp = temp.Parent;
+            }
+            Balance(z);
             return true;
+        }
+
+        internal T GetNthItem(int index)
+        {
+            Node<T> node = this.root;
+            while (true)
+            {
+                if (index < node.Left.Count)
+                {
+                    node = node.Left;
+                }
+                else if (index > node.Left.Count)
+                {
+                    index = index - (node.Left.Count + 1);
+                    node = node.Right;
+                }
+                else
+                {
+                    return node.Item;
+                }
+            }
+        }
+
+        private void Balance(Node<T> z)
+        {
+            Node<T> y;
+            while (z.Parent.IsRed())
+            {
+                if (z.Parent == z.Parent.Parent.Left)
+                {
+                    y = z.Parent.Parent.Right;
+                    if (y.IsRed())
+                    {
+                        z.Parent.MarkBlack();
+                        y.MarkBlack();
+                        z.Parent.Parent.MarkRed();
+                        z = z.Parent.Parent;
+                    }
+                    else
+                    {
+                        if (z == z.Parent.Right)
+                        {
+                            z = z.Parent;
+                            LeftRotate(z);
+                        }
+                        z.Parent.MarkBlack();
+                        z.Parent.Parent.MarkRed();
+                        RightRotate(z.Parent.Parent);
+                    }
+                }
+                else
+                {
+                    y = z.Parent.Parent.Left;
+                    if (y.IsRed())
+                    {
+                        z.Parent.MarkBlack();
+                        y.MarkBlack();
+                        z.Parent.Parent.MarkRed();
+                        z = z.Parent.Parent;
+                    }
+                    else
+                    {
+                        if (z == z.Parent.Left)
+                        {
+                            z = z.Parent;
+                            RightRotate(z);
+                        }
+                        z.Parent.MarkBlack();
+                        z.Parent.Parent.MarkRed();
+                        LeftRotate(z.Parent.Parent);
+                    }
+                }
+            }
+            this.root.MarkBlack();
+        }
+
+        private void LeftRotate(Node<T> x)
+        {
+            Node<T> y = x.Right;
+            x.Right = y.Left;
+            if(!y.Left.IsNil())
+            {
+                y.Left.Parent = x;
+            }
+            y.Parent = x.Parent;
+            if (x.Parent.IsNil())
+            {
+                this.root = y;
+            }
+            else if (x == x.Parent.Left)
+            {
+                x.Parent.Left = y;
+            }
+            else
+            {
+                x.Parent.Right = y;
+            }
+            y.Left = x;
+            x.Parent = y;
+
+            y.Count = x.Count;
+            x.Count = x.Left.Count + x.Right.Count + 1;
+        }
+
+        private void RightRotate(Node<T> x)
+        {
+            Node<T> y = x.Left;
+            x.Left = y.Right;
+            if (!y.Right.IsNil())
+            {
+                y.Right.Parent = x;
+            }
+            y.Parent = x.Parent;
+            if (x.Parent.IsNil())
+            {
+                this.root = y;
+            }
+            else if (x == x.Parent.Right)
+            {
+                x.Parent.Right = y;
+            }
+            else
+            {
+                x.Parent.Left = y;
+            }
+            y.Right = x;
+            x.Parent = y;
+
+            y.Count = x.Count;
+            x.Count = x.Left.Count + x.Right.Count + 1;
         }
 
         public IEnumerator<T> DFS()
