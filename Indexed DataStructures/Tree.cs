@@ -6,8 +6,7 @@ namespace Indexed_DataStructures
     internal sealed class Tree<T>
     {
         Node<T> root = NIL<T>.Instance;
-        private IComparer<T> comparer;
-        private int count;
+        private readonly IComparer<T> comparer;
 
         public Tree(IComparer<T> comparer)
         {
@@ -20,9 +19,11 @@ namespace Indexed_DataStructures
         {
             var y = NIL<T>.Instance;
             var x = this.root;
-            Node<T> z = new Node<T>(item);
-            z.Left = NIL<T>.Instance;
-            z.Right = NIL<T>.Instance;
+            Node<T> z = new Node<T>(item)
+            {
+                Left = NIL<T>.Instance,
+                Right = NIL<T>.Instance
+            };
 
             int c;
             while (!x.IsNil())
@@ -69,6 +70,11 @@ namespace Indexed_DataStructures
             return true;
         }
 
+        internal void Clear()
+        {
+            this.root = NIL<T>.Instance;
+        }
+
         internal T GetNthItem(int index)
         {
             Node<T> node = this.root;
@@ -80,7 +86,7 @@ namespace Indexed_DataStructures
                 }
                 else if (index > node.Left.Count)
                 {
-                    index = index - (node.Left.Count + 1);
+                    index -= node.Left.Count + 1;
                     node = node.Right;
                 }
                 else
@@ -216,7 +222,7 @@ namespace Indexed_DataStructures
             v.Parent = u.Parent;
         }
 
-        public void Remove(T item)
+        public bool Remove(T item)
         {
             Node<T> node = root;
             while (!node.IsNil())
@@ -233,9 +239,10 @@ namespace Indexed_DataStructures
                 else
                 {
                     Remove(node);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         public void Remove(Node<T> z)
@@ -393,6 +400,29 @@ namespace Indexed_DataStructures
             DFS(node.Left, list);
             list.Add(node.Item);
             DFS(node.Right, list);
+        }
+
+        public Node<T> Search(T item)
+        {
+            Node<T> node = this.root;
+            int c;
+            while (!node.IsNil())
+            {
+                c = this.comparer.Compare(item, node.Item);
+                if (c < 0)
+                {
+                    node = node.Left;
+                }
+                else if(c > 0)
+                {
+                    node = node.Right;
+                }
+                else
+                {
+                    return node;
+                }
+            }
+            return null;
         }
     }
 }

@@ -7,45 +7,33 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            //SortedSet<int> set = new SortedSet<int>();
-            IndexedSortedSet<int> set = new IndexedSortedSet<int>();
             Test();
-            set.Add(10);
-            set.Add(5);
-            set.Add(20);
+            IndexedSortedSet<int> set = new IndexedSortedSet<int>();
+            Console.WriteLine((set as ICollection<int>).IsReadOnly);
             set.Add(1);
-            set.Add(8);
-            set.Add(15);
-            set.Add(25);
             set.Add(12);
-            set.Add(16);
-            set.Add(23);
+            set.Add(14);
+            set.Add(11);
+            set.Add(5);
 
-            set.Remove(25);
-
-            for (int i = 0; i < set.Count; i++)
-            {
-                Console.WriteLine($"{i}- {set[i]}");
-            }
-            var ss = set.GetEnumerator();
-            var sss = ss.Current;
-            ss.MoveNext();
-            sss = ss.Current;
-            foreach (var item in set)
+            int[] a = new int[5];
+            set.CopyTo(a,2,1);
+            foreach (var item in a)
             {
                 Console.WriteLine(item);
             }
-            Console.WriteLine("Hello World!");
+            Console.ReadKey();
         }
 
         private static void Test()
         {
             Random rand = new Random();
+            IndexedSortedSet<int> set = new IndexedSortedSet<int>();
             int counter = 0;
             while (true)
             {
+                set.Clear();
                 int size = rand.Next(20000);
-                IndexedSortedSet<int> set = new IndexedSortedSet<int>();
                 HashSet<int> hashSet = new HashSet<int>();
                 for (int i = 0; i < size; i++)
                 {
