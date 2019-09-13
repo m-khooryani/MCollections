@@ -7,8 +7,11 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            Test();
+            //Test();
+            //new SortedSet<int>().m
             IndexedSortedSet<int> set = new IndexedSortedSet<int>();
+            List<int> list = new List<int>();
+            set.ExceptWith(list);
             Console.WriteLine((set as ICollection<int>).IsReadOnly);
             set.Add(1);
             set.Add(12);

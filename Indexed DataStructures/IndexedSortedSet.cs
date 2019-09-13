@@ -10,7 +10,7 @@ namespace Indexed_DataStructures
     [Serializable, DebuggerTypeProxy(typeof(ICollectionDebugView<>)), DebuggerDisplay("Count = {Count}"), TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public class IndexedSortedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback
     {
-        private readonly Tree<T> tree;
+        internal readonly Tree<T> tree;
 
         public IndexedSortedSet()
         {
@@ -29,6 +29,10 @@ namespace Indexed_DataStructures
         public bool IsSynchronized => throw new NotImplementedException();
 
         public object SyncRoot => throw new NotImplementedException();
+
+        public T Max => tree.Max;
+
+        public T Min => tree.Min;
 
         public bool Add(T item)
         {
@@ -55,7 +59,7 @@ namespace Indexed_DataStructures
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.tree.DFS();
         }
 
         void ICollection<T>.Add(T item)
@@ -70,7 +74,7 @@ namespace Indexed_DataStructures
 
         public bool Contains(T item)
         {
-            return this.tree.Search(item) != null;
+            return tree.Contains(item);
         }
 
         public void CopyTo(T[] array)
@@ -116,7 +120,7 @@ namespace Indexed_DataStructures
 
         public void ExceptWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            this.tree.ExceptWith(other);
         }
 
         public void IntersectWith(IEnumerable<T> other)

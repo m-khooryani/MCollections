@@ -15,6 +15,38 @@ namespace Indexed_DataStructures
 
         public int Count => this.root.Count;
 
+        public T Max => GetMax();
+
+        public T Min => GetMin();
+
+        private T GetMin()
+        {
+            if (this.root.IsNil())
+            {
+                return default(T);
+            }
+            Node<T> root = this.root;
+            while (!root.Left.IsNil())
+            {
+                root = root.Left;
+            }
+            return root.Item;
+        }
+
+        private T GetMax()
+        {
+            if (this.root.IsNil())
+            {
+                return default(T);
+            }
+            Node<T> root = this.root;
+            while (!root.Right.IsNil())
+            {
+                root = root.Right;
+            }
+            return root.Item;
+        }
+
         public bool AddIfNotPresent(T item)
         {
             var y = NIL<T>.Instance;
@@ -68,6 +100,11 @@ namespace Indexed_DataStructures
             }
             Balance(z);
             return true;
+        }
+
+        internal bool Contains(T item)
+        {
+            return this.Search(item) != null;
         }
 
         internal void Clear()
@@ -147,6 +184,80 @@ namespace Indexed_DataStructures
                 }
             }
             this.root.MarkBlack();
+        }
+
+        internal void ExceptWith(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            if (Count != 0)
+            {
+                if (ReferenceEquals(other, this))
+                {
+                    this.Clear();
+                }
+                else
+                {
+                    IndexedSortedSet<T> set = other as IndexedSortedSet<T>;
+                    if(set != null && ReferenceEquals(set.tree, this))
+                    {
+                        this.Clear();
+                    }
+                    if ((set != null) && this.HasEqualComparer(set))
+                    {
+                        if (this.comparer.Compare(set.Max, this.Min) < 0)
+                        {
+                            return;
+                        }
+                        else if (this.comparer.Compare(set.Min, this.Max) > 0)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            T min = this.Min;
+                            T max = this.Max;
+                            foreach (T item in other)
+                            {
+                                if (this.comparer.Compare(item, min) >= 0)
+                                {
+                                    if (this.comparer.Compare(item, max) > 0)
+                                    {
+                                        break;
+                                    }
+                                    this.Remove(item);
+                                }
+                            }
+                            return;
+                        }
+                    }
+                    this.RemoveAllElements(other);
+                }
+            }
+        }
+
+        private void RemoveAllElements(IEnumerable<T> other)
+        {
+            T min = this.Min;
+            T max = this.Max;
+            foreach (T item in other)
+            {
+                if (this.comparer.Compare(item, min) < 0)
+                {
+                    continue;
+                }
+                if ((this.comparer.Compare(item, max) <= 0))
+                {
+                    this.Remove(item);
+                }
+            }
+        }
+
+        private bool HasEqualComparer(IndexedSortedSet<T> other)
+        {
+            return (object.ReferenceEquals(this.comparer, other.tree.comparer) || this.comparer.Equals(other.tree.comparer));
         }
 
         private void LeftRotate(Node<T> x)
