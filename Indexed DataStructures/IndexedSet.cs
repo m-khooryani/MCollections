@@ -145,7 +145,7 @@ namespace Indexed_DataStructures
 
         public bool IsSupersetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.IsSuperSetOf(other);
         }
 
         public bool Overlaps(IEnumerable<T> other)

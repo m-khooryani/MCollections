@@ -186,6 +186,22 @@ namespace Indexed_DataStructures
             this.root.MarkBlack();
         }
 
+        internal bool IsSuperSetOf(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            foreach (var item in other)
+            {
+                if (!this.Contains(item))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         internal bool IsSubsetOf(IEnumerable<T> other)
         {
             if (other == null)
