@@ -7,9 +7,9 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            //Test();
-            //new SortedSet<int>().m
-            IndexedSortedSet<int> set = new IndexedSortedSet<int>();
+            Test();
+            //new SortedSet<int>()
+            IndexedSet<int> set = new IndexedSet<int>();
             List<int> list = new List<int>();
             set.ExceptWith(list);
             Console.WriteLine((set as ICollection<int>).IsReadOnly);
@@ -31,7 +31,7 @@ namespace Indexed_DataStructures
         private static void Test()
         {
             Random rand = new Random();
-            IndexedSortedSet<int> set = new IndexedSortedSet<int>();
+            IndexedSet<int> set = new IndexedSet<int>();
             int counter = 0;
             while (true)
             {
@@ -40,7 +40,7 @@ namespace Indexed_DataStructures
                 HashSet<int> hashSet = new HashSet<int>();
                 for (int i = 0; i < size; i++)
                 {
-                    int x = rand.Next(300);
+                    int x = rand.Next(3000);
                     set.Add(x);
                     hashSet.Add(x);
                 }

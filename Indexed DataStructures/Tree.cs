@@ -112,7 +112,7 @@ namespace Indexed_DataStructures
             this.root = NIL<T>.Instance;
         }
 
-        internal T GetNthItem(int index)
+        internal T GetByIndex(int index)
         {
             Node<T> node = this.root;
             while (true)
@@ -186,6 +186,54 @@ namespace Indexed_DataStructures
             this.root.MarkBlack();
         }
 
+        internal bool IsSubsetOf(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            if (this.Count == 0)
+            {
+                return true;
+            }
+            HashSet<T> set = new HashSet<T>(other);
+            var enumerator = this.DFS();
+            while (enumerator.MoveNext())
+            {
+                if (!set.Contains(enumerator.Current))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        internal void IntersectWith(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            if (Count != 0)
+            {
+                if (!ReferenceEquals(other, this))
+                {
+                    if (!(other is IndexedSet<T> set && ReferenceEquals(set.tree, this)))
+                    {
+                        Tree<T> tree = new Tree<T>(this.comparer);
+                        foreach (var item in other)
+                        {
+                            if (this.Contains(item))
+                            {
+                                tree.AddIfNotPresent(item);
+                            }
+                        }
+                        this.root = tree.root;
+                    }
+                }
+            }
+        }
+
         internal void ExceptWith(IEnumerable<T> other)
         {
             if (other == null)
@@ -200,8 +248,8 @@ namespace Indexed_DataStructures
                 }
                 else
                 {
-                    IndexedSortedSet<T> set = other as IndexedSortedSet<T>;
-                    if(set != null && ReferenceEquals(set.tree, this))
+                    IndexedSet<T> set = other as IndexedSet<T>;
+                    if (set != null && ReferenceEquals(set.tree, this))
                     {
                         this.Clear();
                     }
@@ -255,7 +303,7 @@ namespace Indexed_DataStructures
             }
         }
 
-        private bool HasEqualComparer(IndexedSortedSet<T> other)
+        private bool HasEqualComparer(IndexedSet<T> other)
         {
             return (object.ReferenceEquals(this.comparer, other.tree.comparer) || this.comparer.Equals(other.tree.comparer));
         }

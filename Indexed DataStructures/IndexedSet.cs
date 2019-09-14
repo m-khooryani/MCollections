@@ -8,16 +8,16 @@ using System.Runtime.Serialization;
 namespace Indexed_DataStructures
 {
     [Serializable, DebuggerTypeProxy(typeof(ICollectionDebugView<>)), DebuggerDisplay("Count = {Count}"), TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public class IndexedSortedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback
+    public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback
     {
         internal readonly Tree<T> tree;
 
-        public IndexedSortedSet()
+        public IndexedSet()
         {
             this.tree = new Tree<T>(Comparer<T>.Default);
         }
 
-        public IndexedSortedSet(IComparer<T> comparer)
+        public IndexedSet(IComparer<T> comparer)
         {
             this.tree = new Tree<T>(comparer);
         }
@@ -48,7 +48,7 @@ namespace Indexed_DataStructures
         {
             get
             {
-                return this.tree.GetNthItem(index);
+                return this.tree.GetByIndex(index);
             }
         }
 
@@ -125,7 +125,7 @@ namespace Indexed_DataStructures
 
         public void IntersectWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            this.tree.IntersectWith(other);
         }
 
         public bool IsProperSubsetOf(IEnumerable<T> other)
@@ -140,7 +140,7 @@ namespace Indexed_DataStructures
 
         public bool IsSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.IsSubsetOf(other);
         }
 
         public bool IsSupersetOf(IEnumerable<T> other)
