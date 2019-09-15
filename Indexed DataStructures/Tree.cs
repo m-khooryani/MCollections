@@ -186,6 +186,65 @@ namespace Indexed_DataStructures
             this.root.MarkBlack();
         }
 
+        internal bool Overlaps(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            foreach (var item in other)
+            {
+                if (this.Contains(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal bool IsProperSupersetOf(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            HashSet<T> set = new HashSet<T>(other);
+            if (this.Count <= set.Count)
+            {
+                return false;
+            }
+            foreach (var item in set)
+            {
+                if (!this.Contains(item))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        internal bool IsProperSubsetOf(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            HashSet<T> set = new HashSet<T>(other);
+            if(set.Count <= this.Count)
+            {
+                return false;
+            }
+            var enumerator = this.DFS();
+            while (enumerator.MoveNext())
+            {
+                if (!set.Contains(enumerator.Current))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         internal bool IsSuperSetOf(IEnumerable<T> other)
         {
             if (other == null)

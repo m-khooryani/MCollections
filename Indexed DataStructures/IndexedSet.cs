@@ -130,12 +130,12 @@ namespace Indexed_DataStructures
 
         public bool IsProperSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.IsProperSubsetOf(other);
         }
 
         public bool IsProperSupersetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.IsProperSupersetOf(other);
         }
 
         public bool IsSubsetOf(IEnumerable<T> other)
@@ -150,7 +150,7 @@ namespace Indexed_DataStructures
 
         public bool Overlaps(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.Overlaps(other);
         }
 
         public bool SetEquals(IEnumerable<T> other)
