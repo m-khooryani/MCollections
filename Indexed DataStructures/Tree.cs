@@ -230,7 +230,7 @@ namespace Indexed_DataStructures
                 throw new ArgumentNullException("other");
             }
             HashSet<T> set = new HashSet<T>(other);
-            if(set.Count <= this.Count)
+            if (set.Count <= this.Count)
             {
                 return false;
             }
@@ -387,7 +387,7 @@ namespace Indexed_DataStructures
         {
             Node<T> y = x.Right;
             x.Right = y.Left;
-            if(!y.Left.IsNil())
+            if (!y.Left.IsNil())
             {
                 y.Left.Parent = x;
             }
@@ -541,7 +541,7 @@ namespace Indexed_DataStructures
 
         private void DeleteBalance(Node<T> x)
         {
-            while(x!=root && x.IsBlack())
+            while (x != root && x.IsBlack())
             {
                 if (x == x.Parent.Left)
                 {
@@ -647,7 +647,7 @@ namespace Indexed_DataStructures
                 {
                     node = node.Left;
                 }
-                else if(c > 0)
+                else if (c > 0)
                 {
                     node = node.Right;
                 }
