@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Indexed_DataStructures
 {
-    internal sealed class Tree<T>
+    [Serializable]
+    internal sealed class Tree<T> : ISerializable
     {
         Node<T> root = NIL<T>.Instance;
         private readonly IComparer<T> comparer;
@@ -184,6 +186,55 @@ namespace Indexed_DataStructures
                 }
             }
             this.root.MarkBlack();
+        }
+
+        internal void SymmetricExceptWith(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            HashSet<T> set = new HashSet<T>(other);
+            foreach (T local in set)
+            {
+                if (!this.Remove(local))
+                {
+                    this.AddIfNotPresent(local);
+                }
+            }
+        }
+
+        internal void UnionWith(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            foreach (var item in other)
+            {
+                this.AddIfNotPresent(item);
+            }
+        }
+
+        internal bool SetEquals(IEnumerable<T> other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            HashSet<T> set = new HashSet<T>(other);
+            if (set.Count != this.Count)
+            {
+                return false;
+            }
+            foreach (var item in set)
+            {
+                if (!this.Contains(item))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         internal bool Overlaps(IEnumerable<T> other)
@@ -657,6 +708,11 @@ namespace Indexed_DataStructures
                 }
             }
             return null;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

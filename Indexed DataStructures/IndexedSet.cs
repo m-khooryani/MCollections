@@ -26,7 +26,7 @@ namespace Indexed_DataStructures
 
         public bool IsReadOnly => false;
 
-        public bool IsSynchronized => throw new NotImplementedException();
+        public bool IsSynchronized => false;
 
         public object SyncRoot => throw new NotImplementedException();
 
@@ -155,27 +155,52 @@ namespace Indexed_DataStructures
 
         public bool SetEquals(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            return this.tree.SetEquals(other);
         }
 
         public void SymmetricExceptWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            this.tree.SymmetricExceptWith(other);
         }
 
         public void UnionWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            this.tree.UnionWith(other);
         }
 
         public void CopyTo(Array array, int index)
         {
-            throw new NotImplementedException();
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException("index");
+            }
+            if (array is T[] localArray)
+            {
+                this.CopyTo(localArray, index);
+            }
+            else
+            {
+                object[] objects = array as object[];
+                int num = index;
+                foreach (T t in this)
+                {
+                    objects[num++] = t;
+                }
+            }
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException();
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            info.AddValue("Count", this.Count);
+            info.AddValue("Tree", this.tree);
         }
 
         public void OnDeserialization(object sender)

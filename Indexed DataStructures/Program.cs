@@ -7,9 +7,13 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            Test();
+            //Test();
             //new SortedSet<int>()
-            IndexedSet<int> set = new IndexedSet<int>();
+            IndexedSet<int> set = new IndexedSet<int>() { 1, 2, 3, 4, 5 };
+            Array array = Array.CreateInstance(typeof(Program), 5);
+            set.CopyTo(array, 0);
+            HashSet<int> se = new HashSet<int>();
+
             List<int> list = new List<int>();
             set.ExceptWith(list);
             Console.WriteLine((set as ICollection<int>).IsReadOnly);
