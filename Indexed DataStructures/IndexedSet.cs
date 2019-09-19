@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Threading;
 
 namespace Indexed_DataStructures
 {
@@ -26,9 +27,18 @@ namespace Indexed_DataStructures
 
         public bool IsReadOnly => false;
 
-        public bool IsSynchronized => false;
-
-        public object SyncRoot => throw new NotImplementedException();
+        private object syncRoot;
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                if (this.syncRoot == null)
+                {
+                    Interlocked.CompareExchange(ref this.syncRoot, new object(), null);
+                }
+                return this.syncRoot;
+            }
+        }
 
         public T Max => tree.Max;
 
@@ -118,6 +128,14 @@ namespace Indexed_DataStructures
             }
         }
 
+        bool ICollection<T>.IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public void ExceptWith(IEnumerable<T> other)
         {
             this.tree.ExceptWith(other);
@@ -168,7 +186,7 @@ namespace Indexed_DataStructures
             this.tree.UnionWith(other);
         }
 
-        public void CopyTo(Array array, int index)
+        void ICollection.CopyTo(Array array, int index)
         {
             if (array == null)
             {
@@ -193,7 +211,20 @@ namespace Indexed_DataStructures
             }
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        bool ICollection.IsSynchronized
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            this.GetObjectData(info, context);
+        }
+
+        private void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
             {
@@ -203,7 +234,7 @@ namespace Indexed_DataStructures
             info.AddValue("Tree", this.tree);
         }
 
-        public void OnDeserialization(object sender)
+        void IDeserializationCallback.OnDeserialization(object sender)
         {
             throw new NotImplementedException();
         }

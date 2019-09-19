@@ -7,29 +7,10 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            //Test();
-            //new SortedSet<int>()
-            IndexedSet<int> set = new IndexedSet<int>() { 1, 2, 3, 4, 5 };
-            Array array = Array.CreateInstance(typeof(Program), 5);
-            set.CopyTo(array, 0);
-            HashSet<int> se = new HashSet<int>();
-
-            List<int> list = new List<int>();
-            set.ExceptWith(list);
-            Console.WriteLine((set as ICollection<int>).IsReadOnly);
-            set.Add(1);
-            set.Add(12);
-            set.Add(14);
-            set.Add(11);
-            set.Add(5);
-
-            int[] a = new int[5];
-            set.CopyTo(a,2,1);
-            foreach (var item in a)
-            {
-                Console.WriteLine(item);
-            }
-            Console.ReadKey();
+            IndexedDictionary<int, string> dictionary = new IndexedDictionary<int, string>();
+            dictionary.Add(1, "5");
+            dictionary.Add(5, "1");
+            dictionary.Add(1, "54");
         }
 
         private static void Test()
