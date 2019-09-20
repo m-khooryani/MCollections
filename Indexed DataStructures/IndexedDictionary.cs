@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Indexed_DataStructures
 {
@@ -22,9 +21,9 @@ namespace Indexed_DataStructures
         public TValue this[TKey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public object this[object key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public ICollection<TKey> Keys => throw new NotImplementedException();
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => throw new NotImplementedException();
 
-        public ICollection<TValue> Values => throw new NotImplementedException();
+        ICollection<TValue> IDictionary<TKey, TValue>.Values => throw new NotImplementedException();
 
         public int Count => tree.Count;
 
@@ -36,11 +35,7 @@ namespace Indexed_DataStructures
 
         public object SyncRoot => throw new NotImplementedException();
 
-        ICollection IDictionary.Keys => throw new NotImplementedException();
-
         IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => throw new NotImplementedException();
-
-        ICollection IDictionary.Values => throw new NotImplementedException();
 
         IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => throw new NotImplementedException();
 
@@ -51,7 +46,84 @@ namespace Indexed_DataStructures
             this.tree.AddIfNotPresent(new KeyValuePair<TKey, TValue>(key, value));
         }
 
-        public void Add(object key, object value)
+        public void Clear()
+        {
+            tree.Clear();
+        }
+
+        public bool Contains(KeyValuePair<TKey, TValue> item)
+        {
+            return tree.Contains(item);
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            return this.tree.Contains(new KeyValuePair<TKey, TValue>(key, default));
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        {
+            return this.tree.DFS();
+        }
+
+        public bool Remove(TKey key)
+        {
+            return this.tree.Remove(new KeyValuePair<TKey, TValue>(key, default));
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+            var node = this.tree.Search(new KeyValuePair<TKey, TValue>(key, default));
+            if (node.IsNil())
+            {
+                value = default;
+                return false;
+            }
+            value = node.Item.Value;
+            return true;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.tree.DFS();
+        }
+
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+        {
+            this.tree.AddIfNotPresent(item);
+        }
+
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+        {
+            return this.tree.Contains(item);
+        }
+
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+        {
+            return this.tree.Remove(item);
+        }
+
+
+        void IDictionary.Add(object key, object value)
         {
             if (key == null)
             {
@@ -82,17 +154,7 @@ namespace Indexed_DataStructures
             }
         }
 
-        public void Clear()
-        {
-            tree.Clear();
-        }
-
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            return tree.Contains(item);
-        }
-
-        public bool Contains(object key)
+        bool IDictionary.Contains(object key)
         {
             if (key == null)
             {
@@ -105,32 +167,7 @@ namespace Indexed_DataStructures
             return false;
         }
 
-        public bool ContainsKey(TKey key)
-        {
-            return this.tree.Contains(new KeyValuePair<TKey, TValue>(key, default));
-        }
-
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return this.tree.DFS();
-        }
-
-        public bool Remove(TKey key)
-        {
-            return this.tree.Remove(new KeyValuePair<TKey, TValue>(key, default));
-        }
-
-        public void Remove(object key)
+        void IDictionary.Remove(object key)
         {
             if (key == null)
             {
@@ -142,54 +179,69 @@ namespace Indexed_DataStructures
             }
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        bool ICollection.IsSynchronized
         {
-            if (key == null)
+            get
             {
-                throw new ArgumentNullException("key");
-            }
-            var node = this.tree.Search(new KeyValuePair<TKey, TValue>(key, default));
-            if (node.IsNil())
-            {
-                value = default;
                 return false;
             }
-            value = node.Item.Value;
-            return true;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        bool IDictionary.IsFixedSize
         {
-            return this.tree.DFS();
-        }
-
-        IDictionaryEnumerator IDictionary.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static bool IsKeyTypeValid(object key)
-        {
-            if (key == null)
+            get
             {
-                throw new ArgumentNullException("key");
+                return false;
             }
-            return key is TKey;
         }
 
-        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+        bool IDictionary.IsReadOnly
         {
-            this.tree.AddIfNotPresent(item);
+            get
+            {
+                return false;
+            }
         }
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+        ICollection IDictionary.Keys
         {
-            return this.tree.Contains(item);
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+        ICollection IDictionary.Values
         {
-            return this.tree.Remove(item);
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        object IDictionary.this[object key]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                return this._set.SyncRoot;
+            }
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            this._set.CopyTo(array, index);
         }
     }
 }
