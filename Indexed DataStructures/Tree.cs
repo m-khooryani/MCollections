@@ -285,7 +285,7 @@ namespace Indexed_DataStructures
             {
                 return false;
             }
-            var enumerator = this.DFS();
+            var enumerator = this.InOrder();
             while (enumerator.MoveNext())
             {
                 if (!set.Contains(enumerator.Current))
@@ -323,7 +323,7 @@ namespace Indexed_DataStructures
                 return true;
             }
             HashSet<T> set = new HashSet<T>(other);
-            var enumerator = this.DFS();
+            var enumerator = this.InOrder();
             while (enumerator.MoveNext())
             {
                 if (!set.Contains(enumerator.Current))
@@ -669,22 +669,25 @@ namespace Indexed_DataStructures
             return node;
         }
 
-        public IEnumerator<T> DFS()
+        public IEnumerator<T> InOrder()
         {
-            List<T> list = new List<T>();
-            this.DFS(this.root, list);
-            return list.GetEnumerator();
-        }
-
-        private void DFS(Node<T> node, List<T> list)
-        {
-            if (node.IsNil())
+            if (root.IsNil())
             {
-                return;
+                yield break;
             }
-            DFS(node.Left, list);
-            list.Add(node.Item);
-            DFS(node.Right, list);
+            Stack<Node<T>> stack = new Stack<Node<T>>();
+            Node<T> node = root;
+            while ((!node.IsNil()) || stack.Count > 0)
+            {
+                while (!node.IsNil())
+                {
+                    stack.Push(node);
+                    node = node.Left;
+                }
+                node = stack.Pop();
+                yield return node.Item;
+                node = node.Right;
+            }
         }
 
         public Node<T> Search(T item)

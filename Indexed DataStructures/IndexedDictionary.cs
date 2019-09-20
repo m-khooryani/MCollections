@@ -73,7 +73,7 @@ namespace Indexed_DataStructures
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
-            return this.tree.DFS();
+            return this.tree.InOrder();
         }
 
         public bool Remove(TKey key)
@@ -99,7 +99,7 @@ namespace Indexed_DataStructures
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.tree.DFS();
+            return this.tree.InOrder();
         }
 
         IDictionaryEnumerator IDictionary.GetEnumerator()
@@ -235,13 +235,13 @@ namespace Indexed_DataStructures
         {
             get
             {
-                return this._set.SyncRoot;
+                throw new NotImplementedException();
             }
         }
 
         void ICollection.CopyTo(Array array, int index)
         {
-            this._set.CopyTo(array, index);
+            throw new NotImplementedException();
         }
     }
 }

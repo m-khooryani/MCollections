@@ -64,12 +64,12 @@ namespace Indexed_DataStructures
 
         public IEnumerator<T> GetEnumerator()
         {
-            return this.tree.DFS();
+            return this.tree.InOrder();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.tree.DFS();
+            return this.tree.InOrder();
         }
 
         void ICollection<T>.Add(T item)
