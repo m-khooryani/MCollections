@@ -422,7 +422,7 @@ namespace Indexed_DataStructures
                 {
                     continue;
                 }
-                if ((this.comparer.Compare(item, max) <= 0))
+                if (this.comparer.Compare(item, max) <= 0)
                 {
                     this.Remove(item);
                 }
