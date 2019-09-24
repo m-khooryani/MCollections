@@ -7,7 +7,20 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
+            SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
+            sd.Add(1, "1");
+            sd.Add(2, "2");
+            foreach (var item in sd.Keys)
+            {
+
+            }
             IndexedDictionary<int, string> dictionary = new IndexedDictionary<int, string>();
+            dictionary.Add(1, "5");
+            dictionary.Add(5, "1");
+            foreach (var item in dictionary.Keys)
+            {
+
+            }
             dictionary.Add(1, "5");
             dictionary.Add(5, "1");
             dictionary.Add(1, "54");

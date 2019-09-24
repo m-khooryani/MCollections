@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Indexed_DataStructures
 {
-    public class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
+    public partial class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
         internal readonly Tree<KeyValuePair<TKey, TValue>> tree;
+        private KeyCollection _keys;
 
         public IndexedDictionary()
         {
@@ -18,10 +20,44 @@ namespace Indexed_DataStructures
             this.tree = new Tree<KeyValuePair<TKey, TValue>>(comparer);
         }
 
-        public TValue this[TKey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public object this[object key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TValue this[TKey key]
+        {
+            get
+            {
+                var node = this.tree.Search(new KeyValuePair<TKey, TValue>(key, default));
+                if(node == null)
+                {
+                    return default;
+                }
+                return node.Item.Value;
+            }
+            set
+            {
+                KeyValuePair<TKey, TValue> item = new KeyValuePair<TKey, TValue>(key, value);
+                var node = this.tree.Search(item);
+                if (node == null)
+                {
+                    this.tree.AddIfNotPresent(item);
+                }
+                else
+                {
+                    node.Item = item;
+                }
+            }
+        }
+        object IDictionary.this[object key]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys => throw new NotImplementedException();
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
         ICollection<TValue> IDictionary<TKey, TValue>.Values => throw new NotImplementedException();
 
@@ -33,9 +69,7 @@ namespace Indexed_DataStructures
 
         public bool IsSynchronized => false;
 
-        public object SyncRoot => throw new NotImplementedException();
-
-        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => throw new NotImplementedException();
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
 
         IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => throw new NotImplementedException();
 
@@ -63,12 +97,55 @@ namespace Indexed_DataStructures
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            int count = array.Length;
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+            if (arrayIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException("index");
+            }
+            if (count > (array.Length - arrayIndex))
+            {
+                throw new ArgumentException();
+            }
+            int num = arrayIndex;
+            int c = 0;
+            foreach (KeyValuePair<TKey, TValue> t in this)
+            {
+                if (c >= count)
+                {
+                    break;
+                }
+                c++;
+                array[num++] = t;
+            }
         }
 
-        public void CopyTo(Array array, int index)
+        void ICollection.CopyTo(Array array, int index)
         {
-            throw new NotImplementedException();
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException("index");
+            }
+            if (array is KeyValuePair<TKey, TValue>[] localArray)
+            {
+                this.CopyTo(localArray, index);
+            }
+            else
+            {
+                object[] objects = array as object[];
+                int num = index;
+                foreach (KeyValuePair<TKey, TValue> t in this)
+                {
+                    objects[num++] = t;
+                }
+            }
         }
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
@@ -207,7 +284,19 @@ namespace Indexed_DataStructures
         {
             get
             {
-                throw new NotImplementedException();
+                return this.Keys;
+            }
+        }
+
+        public KeyCollection Keys
+        {
+            get
+            {
+                if (this._keys == null)
+                {
+                    this._keys = new KeyCollection(this.tree);
+                }
+                return this._keys;
             }
         }
 
@@ -219,29 +308,17 @@ namespace Indexed_DataStructures
             }
         }
 
-        object IDictionary.this[object key]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        private object syncRoot;
         object ICollection.SyncRoot
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.syncRoot == null)
+                {
+                    Interlocked.CompareExchange(ref this.syncRoot, new object(), null);
+                }
+                return this.syncRoot;
             }
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
         }
     }
 }

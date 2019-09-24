@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Indexed_DataStructures
+﻿namespace Indexed_DataStructures
 {
     internal sealed class Node<T>
     {
-        public T Item { get; private set; }
+        public T Item { get; internal set; }
         public Node<T> Left { get; set; }
         public Node<T> Right { get; set; }
         public Node<T> Parent { get; set; }

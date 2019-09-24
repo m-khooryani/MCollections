@@ -7,7 +7,7 @@ namespace Indexed_DataStructures
     [Serializable]
     internal sealed class Tree<T> : ISerializable
     {
-        Node<T> root = NIL<T>.Instance;
+        internal Node<T> root = NIL<T>.Instance;
         private readonly IComparer<T> comparer;
 
         public Tree(IComparer<T> comparer)
