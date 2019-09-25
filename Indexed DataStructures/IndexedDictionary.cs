@@ -9,6 +9,8 @@ namespace Indexed_DataStructures
     {
         internal readonly Tree<KeyValuePair<TKey, TValue>> tree;
         private KeyCollection _keys;
+        private object syncRoot;
+        private ValueCollection _values;
 
         public IndexedDictionary()
         {
@@ -59,7 +61,7 @@ namespace Indexed_DataStructures
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
-        ICollection<TValue> IDictionary<TKey, TValue>.Values => throw new NotImplementedException();
+        ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
 
         public int Count => tree.Count;
 
@@ -71,7 +73,7 @@ namespace Indexed_DataStructures
 
         IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
 
-        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => throw new NotImplementedException();
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Values;
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
 
@@ -256,37 +258,13 @@ namespace Indexed_DataStructures
             }
         }
 
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection.IsSynchronized => false;
 
-        bool IDictionary.IsFixedSize
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IDictionary.IsFixedSize => false;
 
-        bool IDictionary.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IDictionary.IsReadOnly => false;
 
-        ICollection IDictionary.Keys
-        {
-            get
-            {
-                return this.Keys;
-            }
-        }
+        ICollection IDictionary.Keys => this.Keys;
 
         public KeyCollection Keys
         {
@@ -300,15 +278,20 @@ namespace Indexed_DataStructures
             }
         }
 
-        ICollection IDictionary.Values
+        public ValueCollection Values
         {
             get
             {
-                throw new NotImplementedException();
+                if (this._values == null)
+                {
+                    this._values = new ValueCollection(this.tree);
+                }
+                return this._values;
             }
         }
 
-        private object syncRoot;
+        ICollection IDictionary.Values => Values;
+
         object ICollection.SyncRoot
         {
             get
