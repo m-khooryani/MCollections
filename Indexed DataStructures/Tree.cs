@@ -25,7 +25,7 @@ namespace Indexed_DataStructures
         {
             if (this.root.IsNil())
             {
-                return default(T);
+                return default;
             }
             Node<T> root = this.root;
             while (!root.Left.IsNil())
@@ -39,7 +39,7 @@ namespace Indexed_DataStructures
         {
             if (this.root.IsNil())
             {
-                return default(T);
+                return default;
             }
             Node<T> root = this.root;
             while (!root.Right.IsNil())
