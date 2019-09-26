@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Indexed_DataStructures
@@ -7,7 +8,7 @@ namespace Indexed_DataStructures
     {
         static void Main(string[] args)
         {
-            Test2();
+            //Test2();
             SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
             sd.Add(1, "1");
             sd.Add(2, "2");
@@ -18,6 +19,16 @@ namespace Indexed_DataStructures
             IndexedDictionary<int, string> dictionary = new IndexedDictionary<int, string>();
             dictionary.Add(1, "5");
             dictionary.Add(5, "1");
+
+            IDictionary d = dictionary;
+            foreach (DictionaryEntry item in d)
+            {
+
+            }
+            foreach (DictionaryEntry item in d)
+            {
+
+            }
             foreach (var item in dictionary.Values)
             {
 

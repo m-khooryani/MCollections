@@ -51,13 +51,54 @@ namespace Indexed_DataStructures
         {
             get
             {
-                throw new NotImplementedException();
+                if (key is TKey key1)
+                {
+                    Node<KeyValuePair<TKey, TValue>> node = this.tree.Search(new KeyValuePair<TKey, TValue>(key1, default));
+                    if (node.IsNil())
+                    {
+                        return null;
+                    }
+                    return node.Item.Value;
+                }
+                else
+                {
+                    return null;
+                }
             }
             set
             {
-                throw new NotImplementedException();
+                if (key == null)
+                {
+                    throw new ArgumentNullException("key");
+                }
+                if (value == null)
+                {
+                    TValue local = default;
+                    if (local != null)
+                    {
+                        throw new ArgumentNullException("value");
+                    }
+                }
+                try
+                {
+                    TKey key1 = (TKey)key;
+                    try
+                    {
+                        this[key1] = (TValue)value;
+                    }
+                    catch (InvalidCastException)
+                    {
+                        throw new ArgumentException("value");
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    throw new ArgumentException("key");
+                }
             }
         }
+
+        public TValue GetByIndex(int index) => this.tree.GetByIndex(index).Value;
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
@@ -183,7 +224,7 @@ namespace Indexed_DataStructures
 
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new DictionaryEnumerator(this);
         }
 
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
