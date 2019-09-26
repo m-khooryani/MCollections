@@ -7,12 +7,13 @@ namespace Indexed_DataStructures
     {
         internal Node<T> root;
         public IComparer<T> Comparer { get; private set; }
-        private readonly Node<T> nilInstance = new NilNode<T>();
+        private readonly Node<T> nilInstance;
 
         public RedBlackTree(IComparer<T> comparer)
         {
             this.Comparer = comparer;
-            root = nilInstance;
+            this.nilInstance = new NilNode<T>();
+            this.root = nilInstance;
         }
 
         public int Count => this.root.Count;
