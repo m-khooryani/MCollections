@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace Indexed_DataStructures
 {
-    [Serializable]
-    internal sealed class Tree<T> : ISerializable
+    internal sealed class RedBlackTree<T> : ISelfBalanceTree<T>
     {
         internal Node<T> root;
+        public IComparer<T> Comparer { get; private set; }
         private readonly Node<T> nilInstance = new NilNode<T>();
-        private readonly IComparer<T> comparer;
 
-        public Tree(IComparer<T> comparer)
+        public RedBlackTree(IComparer<T> comparer)
         {
-            this.comparer = comparer;
+            this.Comparer = comparer;
             root = nilInstance;
         }
 
@@ -22,6 +20,7 @@ namespace Indexed_DataStructures
         public T Max => GetMax();
 
         public T Min => GetMin();
+
 
         private T GetMin()
         {
@@ -68,7 +67,7 @@ namespace Indexed_DataStructures
             while (!x.IsNil())
             {
                 y = x;
-                c = this.comparer.Compare(z.Item, x.Item);
+                c = this.Comparer.Compare(z.Item, x.Item);
                 if (c == 0)
                 {
                     return false;
@@ -87,7 +86,7 @@ namespace Indexed_DataStructures
             {
                 this.root = z;
             }
-            c = this.comparer.Compare(z.Item, y.Item);
+            c = this.Comparer.Compare(z.Item, y.Item);
             if (c < 0)
             {
                 y.Left = z;
@@ -111,18 +110,17 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal bool Contains(T item)
+        public bool Contains(T item)
         {
             return this.Search(item) != null;
         }
 
-        internal void Clear()
+        public void Clear()
         {
-            //this.root = NIL<T>.Instance;
             this.root = nilInstance;
         }
 
-        internal T GetByIndex(int index)
+        public T GetByIndex(int index)
         {
             Node<T> node = this.root;
             while (true)
@@ -196,7 +194,7 @@ namespace Indexed_DataStructures
             this.root.MarkBlack();
         }
 
-        internal void SymmetricExceptWith(IEnumerable<T> other)
+        public void SymmetricExceptWith(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -212,7 +210,7 @@ namespace Indexed_DataStructures
             }
         }
 
-        internal void UnionWith(IEnumerable<T> other)
+        public void UnionWith(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -224,7 +222,7 @@ namespace Indexed_DataStructures
             }
         }
 
-        internal bool SetEquals(IEnumerable<T> other)
+        public bool SetEquals(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -245,7 +243,7 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal bool Overlaps(IEnumerable<T> other)
+        public bool Overlaps(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -261,7 +259,7 @@ namespace Indexed_DataStructures
             return false;
         }
 
-        internal bool IsProperSupersetOf(IEnumerable<T> other)
+        public bool IsProperSupersetOf(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -282,7 +280,7 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal bool IsProperSubsetOf(IEnumerable<T> other)
+        public bool IsProperSubsetOf(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -304,7 +302,7 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal bool IsSuperSetOf(IEnumerable<T> other)
+        public bool IsSuperSetOf(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -320,7 +318,7 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal bool IsSubsetOf(IEnumerable<T> other)
+        public bool IsSubsetOf(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -342,7 +340,7 @@ namespace Indexed_DataStructures
             return true;
         }
 
-        internal void IntersectWith(IEnumerable<T> other)
+        public void IntersectWith(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -354,7 +352,7 @@ namespace Indexed_DataStructures
                 {
                     if (!(other is IndexedSet<T> set && ReferenceEquals(set.tree, this)))
                     {
-                        Tree<T> tree = new Tree<T>(this.comparer);
+                        RedBlackTree<T> tree = new RedBlackTree<T>(this.Comparer);
                         foreach (var item in other)
                         {
                             if (this.Contains(item))
@@ -368,7 +366,7 @@ namespace Indexed_DataStructures
             }
         }
 
-        internal void ExceptWith(IEnumerable<T> other)
+        public void ExceptWith(IEnumerable<T> other)
         {
             if (other == null)
             {
@@ -389,11 +387,11 @@ namespace Indexed_DataStructures
                     }
                     if ((set != null) && this.HasEqualComparer(set))
                     {
-                        if (this.comparer.Compare(set.Max, this.Min) < 0)
+                        if (this.Comparer.Compare(set.Max, this.Min) < 0)
                         {
                             return;
                         }
-                        else if (this.comparer.Compare(set.Min, this.Max) > 0)
+                        else if (this.Comparer.Compare(set.Min, this.Max) > 0)
                         {
                             return;
                         }
@@ -403,9 +401,9 @@ namespace Indexed_DataStructures
                             T max = this.Max;
                             foreach (T item in other)
                             {
-                                if (this.comparer.Compare(item, min) >= 0)
+                                if (this.Comparer.Compare(item, min) >= 0)
                                 {
-                                    if (this.comparer.Compare(item, max) > 0)
+                                    if (this.Comparer.Compare(item, max) > 0)
                                     {
                                         break;
                                     }
@@ -426,11 +424,11 @@ namespace Indexed_DataStructures
             T max = this.Max;
             foreach (T item in other)
             {
-                if (this.comparer.Compare(item, min) < 0)
+                if (this.Comparer.Compare(item, min) < 0)
                 {
                     continue;
                 }
-                if (this.comparer.Compare(item, max) <= 0)
+                if (this.Comparer.Compare(item, max) <= 0)
                 {
                     this.Remove(item);
                 }
@@ -439,7 +437,7 @@ namespace Indexed_DataStructures
 
         private bool HasEqualComparer(IndexedSet<T> other)
         {
-            return (object.ReferenceEquals(this.comparer, other.tree.comparer) || this.comparer.Equals(other.tree.comparer));
+            return (object.ReferenceEquals(this.Comparer, other.tree.Comparer) || this.Comparer.Equals(other.tree.Comparer));
         }
 
         private void LeftRotate(Node<T> x)
@@ -498,7 +496,7 @@ namespace Indexed_DataStructures
             x.Count = x.Left.Count + x.Right.Count + 1;
         }
 
-        public void Transplant(Node<T> u, Node<T> v)
+        private void Transplant(Node<T> u, Node<T> v)
         {
             if (u.Parent.IsNil())
             {
@@ -520,7 +518,7 @@ namespace Indexed_DataStructures
             Node<T> node = root;
             while (!node.IsNil())
             {
-                int c = this.comparer.Compare(item, node.Item);
+                int c = this.Comparer.Compare(item, node.Item);
                 if (c < 0)
                 {
                     node = node.Left;
@@ -538,7 +536,7 @@ namespace Indexed_DataStructures
             return false;
         }
 
-        public void Remove(Node<T> z)
+        private void Remove(Node<T> z)
         {
             var y = z;
             var yOriginalColor = y.Color;
@@ -704,7 +702,7 @@ namespace Indexed_DataStructures
             int c;
             while (!node.IsNil())
             {
-                c = this.comparer.Compare(item, node.Item);
+                c = this.Comparer.Compare(item, node.Item);
                 if (c < 0)
                 {
                     node = node.Left;
@@ -719,11 +717,6 @@ namespace Indexed_DataStructures
                 }
             }
             return null;
-        }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 }

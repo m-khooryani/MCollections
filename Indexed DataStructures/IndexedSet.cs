@@ -3,24 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Threading;
 
 namespace Indexed_DataStructures
 {
-    [Serializable, DebuggerTypeProxy(typeof(ICollectionDebugView<>)), DebuggerDisplay("Count = {Count}"), TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-    public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback
+    [DebuggerTypeProxy(typeof(CollectionDebugView<>)), DebuggerDisplay("Count = {Count}"), TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+    public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>
     {
-        internal readonly Tree<T> tree;
+        internal readonly ISelfBalanceTree<T> tree;
 
         public IndexedSet()
         {
-            this.tree = new Tree<T>(Comparer<T>.Default);
+            this.tree = new RedBlackTree<T>(Comparer<T>.Default);
         }
 
         public IndexedSet(IComparer<T> comparer)
         {
-            this.tree = new Tree<T>(comparer);
+            this.tree = new RedBlackTree<T>(comparer);
         }
 
         public int Count => this.tree.Count;
@@ -217,26 +216,6 @@ namespace Indexed_DataStructures
             {
                 return false;
             }
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            this.GetObjectData(info, context);
-        }
-
-        private void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
-            }
-            info.AddValue("Count", this.Count);
-            info.AddValue("Tree", this.tree);
-        }
-
-        void IDeserializationCallback.OnDeserialization(object sender)
-        {
-            throw new NotImplementedException();
         }
     }
 }

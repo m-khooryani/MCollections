@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 namespace Indexed_DataStructures
 {
-    internal sealed class ICollectionDebugView<T>
+    internal sealed class CollectionDebugView<T>
     {
         private readonly ICollection<T> collection;
 
-        public ICollectionDebugView(ICollection<T> collection)
+        public CollectionDebugView(ICollection<T> collection)
         {
             this.collection = collection ?? throw new ArgumentNullException("collection");
         }

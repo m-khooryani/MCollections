@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Indexed_DataStructures
 {
+    [DebuggerDisplay("Count = {Count}"), DebuggerTypeProxy(typeof(DictionaryDebugView<,>)), TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public partial class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
-        internal readonly Tree<KeyValuePair<TKey, TValue>> tree;
+        internal readonly RedBlackTree<KeyValuePair<TKey, TValue>> tree;
         private KeyCollection _keys;
         private object syncRoot;
         private ValueCollection _values;
 
         public IndexedDictionary()
         {
-            this.tree = new Tree<KeyValuePair<TKey, TValue>>(new KeyCalueCompare<TKey, TValue>());
+            this.tree = new RedBlackTree<KeyValuePair<TKey, TValue>>(new KeyCalueCompare<TKey, TValue>());
         }
 
         public IndexedDictionary(IComparer<KeyValuePair<TKey, TValue>> comparer)
         {
-            this.tree = new Tree<KeyValuePair<TKey, TValue>>(comparer);
+            this.tree = new RedBlackTree<KeyValuePair<TKey, TValue>>(comparer);
         }
 
         public TValue this[TKey key]

@@ -10,7 +10,7 @@ namespace Indexed_DataStructures
         static int thread = 0;
         static void Main(string[] args)
         {
-            ParallelTest();
+            //ParallelTest();
             //Test2();
             SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
             sd.Add(1, "1");

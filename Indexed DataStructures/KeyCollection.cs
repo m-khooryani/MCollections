@@ -8,9 +8,9 @@ namespace Indexed_DataStructures
     {
         public sealed class KeyCollection : IEnumerable<TKey>, ICollection, ICollection<TKey>
         {
-            private readonly Tree<KeyValuePair<TKey, TValue>> tree;
+            private readonly RedBlackTree<KeyValuePair<TKey, TValue>> tree;
 
-            internal KeyCollection(Tree<KeyValuePair<TKey, TValue>> root)
+            internal KeyCollection(RedBlackTree<KeyValuePair<TKey, TValue>> root)
             {
                 this.tree = root;
             }
