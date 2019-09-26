@@ -7,12 +7,14 @@ namespace Indexed_DataStructures
     [Serializable]
     internal sealed class Tree<T> : ISerializable
     {
-        internal Node<T> root = NIL<T>.Instance;
+        internal Node<T> root;
+        private readonly Node<T> nilInstance = new NilNode<T>();
         private readonly IComparer<T> comparer;
 
         public Tree(IComparer<T> comparer)
         {
             this.comparer = comparer;
+            root = nilInstance;
         }
 
         public int Count => this.root.Count;
@@ -51,12 +53,15 @@ namespace Indexed_DataStructures
 
         public bool AddIfNotPresent(T item)
         {
-            var y = NIL<T>.Instance;
+            //var y = NIL<T>.Instance;
+            var y = nilInstance;
             var x = this.root;
             Node<T> z = new Node<T>(item)
             {
-                Left = NIL<T>.Instance,
-                Right = NIL<T>.Instance
+                //Left = NIL<T>.Instance,
+                Left = nilInstance,
+                //Right = NIL<T>.Instance
+                Right = nilInstance
             };
 
             int c;
@@ -91,8 +96,10 @@ namespace Indexed_DataStructures
             {
                 y.Right = z;
             }
-            z.Left = NIL<T>.Instance;
-            z.Right = NIL<T>.Instance;
+            //z.Left = NIL<T>.Instance;
+            z.Left = nilInstance;
+            //z.Right = NIL<T>.Instance;
+            z.Right = nilInstance;
             z.MarkRed();
             var temp = z;
             while (!temp.IsNil())
@@ -111,7 +118,8 @@ namespace Indexed_DataStructures
 
         internal void Clear()
         {
-            this.root = NIL<T>.Instance;
+            //this.root = NIL<T>.Instance;
+            this.root = nilInstance;
         }
 
         internal T GetByIndex(int index)

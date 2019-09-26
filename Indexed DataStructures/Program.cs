@@ -10,13 +10,7 @@ namespace Indexed_DataStructures
         static int thread = 0;
         static void Main(string[] args)
         {
-            Task task1 = new Task(() => Test());
-            Task task2 = new Task(() => Test());
-            Task task3 = new Task(() => Test());
-            Task task4 = new Task(() => Test());
-            task1.Start();
-            task2.Start();
-            Task.WaitAll(task1, task2, task3, task4);
+            ParallelTest();
             //Test2();
             SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
             sd.Add(1, "1");
@@ -45,6 +39,19 @@ namespace Indexed_DataStructures
             dictionary.Add(1, "5");
             dictionary.Add(5, "1");
             dictionary.Add(1, "54");
+        }
+
+        private static void ParallelTest()
+        {
+            Task task1 = new Task(() => Test());
+            Task task2 = new Task(() => Test());
+            Task task3 = new Task(() => Test());
+            Task task4 = new Task(() => Test());
+            task1.Start();
+            task2.Start();
+            task3.Start();
+            task4.Start();
+            Task.WaitAll(task1, task2, task3, task4);
         }
 
         private static void Test2()

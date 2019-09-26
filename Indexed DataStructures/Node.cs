@@ -1,22 +1,23 @@
 ﻿namespace Indexed_DataStructures
 {
-    internal sealed class Node<T>
+    internal class Node<T>
     {
         public T Item { get; internal set; }
         public Node<T> Left { get; set; }
         public Node<T> Right { get; set; }
         public Node<T> Parent { get; set; }
         public Color Color { get; set; }
-        public int Count;
+        public int Count { get; set; }
 
         public Node(T item)
+            : this()
         {
             this.Item = item;
         }
 
         internal Node()
         {
-
+            // default color is black(0)
         }
 
         public void MarkRed()
@@ -34,20 +35,14 @@
             return this.Color == Color.RED;
         }
 
-        internal bool IsNil()
+        virtual internal bool IsNil()
         {
-            return this == NIL<T>.Instance;
+            return false;
         }
 
         internal bool IsBlack()
         {
             return !this.IsRed();
         }
-    }
-
-    internal enum Color : byte
-    {
-        BLACK = 0,
-        RED = 1,
     }
 }
