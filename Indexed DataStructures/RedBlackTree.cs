@@ -52,14 +52,11 @@ namespace Indexed_DataStructures
 
         public bool AddIfNotPresent(T item)
         {
-            //var y = NIL<T>.Instance;
             var y = nilInstance;
             var x = this.root;
             Node<T> z = new Node<T>(item)
             {
-                //Left = NIL<T>.Instance,
                 Left = nilInstance,
-                //Right = NIL<T>.Instance
                 Right = nilInstance
             };
 
@@ -95,9 +92,7 @@ namespace Indexed_DataStructures
             {
                 y.Right = z;
             }
-            //z.Left = NIL<T>.Instance;
             z.Left = nilInstance;
-            //z.Right = NIL<T>.Instance;
             z.Right = nilInstance;
             z.MarkRed();
             var temp = z;
