@@ -1,4 +1,4 @@
-﻿namespace IndexedCollections
+﻿namespace MCollections
 {
     internal enum Color : byte
     {

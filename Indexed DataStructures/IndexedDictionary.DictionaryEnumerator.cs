@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace IndexedCollections
+namespace MCollections
 {
     public partial class IndexedDictionary<TKey, TValue>
     {

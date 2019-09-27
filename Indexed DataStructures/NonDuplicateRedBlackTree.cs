@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace IndexedCollections
+namespace MCollections
 {
     internal class NonDuplicateRedBlackTree<T> : RedBlackTree<T>
     {

@@ -1,4 +1,4 @@
-﻿using IndexedCollections;
+﻿using MCollections;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,10 +8,10 @@ namespace ConsoleTest
 {
     class Program
     {
-        static int thread = 0;
+        static int threadId = 0;
         static void Main(string[] args)
         {
-            //ParallelTest();
+            ParallelTest();
             //Test2();
             //Benchmark();
 
@@ -120,7 +120,7 @@ namespace ConsoleTest
 
         private static void Test()
         {
-            int tid = ++thread;
+            int tid = ++threadId;
             Random rand = new Random();
             IndexedSet<int> set = new IndexedSet<int>();
             int counter = 0;

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Indexed DataStructures\IndexedCollections.csproj" />
+    <ProjectReference Include="..\Indexed DataStructures\MCollections.csproj" />
   </ItemGroup>
 
 </Project>

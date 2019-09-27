@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndexedCollections", "Indexed DataStructures\IndexedCollections.csproj", "{462B25DB-2A6B-4BD3-A2FD-4BDE44118C10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCollections", "Indexed DataStructures\MCollections.csproj", "{462B25DB-2A6B-4BD3-A2FD-4BDE44118C10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject", "XUnitTestProject\XUnitTestProject.csproj", "{54EB7FCD-41A4-47AA-B327-A7DE65DA0745}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{462DAA77-0F2C-4479-A0A6-2140D620AED6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{462DAA77-0F2C-4479-A0A6-2140D620AED6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

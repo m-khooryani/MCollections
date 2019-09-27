@@ -1,4 +1,4 @@
-﻿namespace IndexedCollections
+﻿namespace MCollections
 {
     class NilNode<T> : Node<T>
     {

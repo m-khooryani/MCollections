@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IndexedCollections
+namespace MCollections
 {
     internal class KeyCalueCompare<TKey, TValue> : IComparer<KeyValuePair<TKey, TValue>>
     {

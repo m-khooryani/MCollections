@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace IndexedCollections
+namespace MCollections
 {
     internal sealed class CollectionDebugView<T>
     {

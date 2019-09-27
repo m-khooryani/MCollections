@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IndexedCollections
+namespace MCollections
 {
     internal interface ISelfBalanceTree<T>
     {
