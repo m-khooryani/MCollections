@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Indexed_DataStructures
+namespace IndexedCollections
 {
     internal sealed class DictionaryDebugView<TKey, TValue>
     {

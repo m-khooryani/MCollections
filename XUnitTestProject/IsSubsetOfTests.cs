@@ -1,4 +1,4 @@
-﻿using Indexed_DataStructures;
+﻿using IndexedCollections;
 using System.Collections.Generic;
 using Xunit;
 

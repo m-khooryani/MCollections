@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Indexed_DataStructures
+namespace IndexedCollections
 {
     internal class RedBlackTree<T> : ISelfBalanceTree<T>
     {

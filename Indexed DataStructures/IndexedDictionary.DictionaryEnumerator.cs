@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace Indexed_DataStructures
+namespace IndexedCollections
 {
     public partial class IndexedDictionary<TKey, TValue>
     {

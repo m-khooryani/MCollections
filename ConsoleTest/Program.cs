@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using IndexedCollections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Indexed_DataStructures
+namespace ConsoleTest
 {
     class Program
     {
@@ -13,34 +13,37 @@ namespace Indexed_DataStructures
         {
             //ParallelTest();
             //Test2();
-            Benchmark();
-            SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
-            sd.Add(1, "1");
-            sd.Add(2, "2");
-            foreach (var item in sd.Keys)
-            {
+            //Benchmark();
 
-            }
-            IndexedDictionary<int, string> dictionary = new IndexedDictionary<int, string>();
-            dictionary.Add(1, "5");
-            dictionary.Add(5, "1");
+            IndexedSet<string> set = new IndexedSet<string>();
+            set.Add("two");
+            set.Add("one");
+            set.Add("zero");
+            string first = set[0];
 
-            IDictionary d = dictionary;
-            foreach (DictionaryEntry item in d)
-            {
+            //sd.Add(1, "1");
+            //sd.Add(2, "2");
+            //foreach (var item in sd.Keys)
+            //{
 
-            }
-            foreach (DictionaryEntry item in d)
-            {
+            //}
+            //IndexedDictionary<int, string> dictionary = new IndexedDictionary<int, string>();
+            //dictionary.Add(1, "5");
+            //dictionary.Add(5, "1");
 
-            }
-            foreach (var item in dictionary.Values)
-            {
+            //IDictionary d = dictionary;
+            //foreach (DictionaryEntry item in d)
+            //{
 
-            }
-            dictionary.Add(1, "5");
-            dictionary.Add(5, "1");
-            dictionary.Add(1, "54");
+            //}
+            //foreach (DictionaryEntry item in d)
+            //{
+
+            //}
+            //foreach (var item in dictionary.Values)
+            //{
+
+            //}
         }
 
         private static void Benchmark()
@@ -52,7 +55,7 @@ namespace Indexed_DataStructures
             int n = 500 * 1000;
             Random rand = new Random();
             int max = 1000 * 1000;
-            while(set.Count < n)
+            while (set.Count < n)
             {
                 set.Add(rand.Next(max));
             }
@@ -60,7 +63,7 @@ namespace Indexed_DataStructures
             stopwatch.Start();
             foreach (int i in set)
             {
-                    sd.Add(i, 0);
+                sd.Add(i, 0);
             }
             stopwatch.Stop();
             Console.WriteLine("SD: " + stopwatch.ElapsedMilliseconds);
@@ -133,7 +136,7 @@ namespace Indexed_DataStructures
                     hashSet.Add(x);
                 }
                 int size2 = rand.Next(5000);
-                for(int i=0; i<size2; i++)
+                for (int i = 0; i < size2; i++)
                 {
                     int x = rand.Next(300);
                     set.Remove(x);

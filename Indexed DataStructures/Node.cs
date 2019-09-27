@@ -1,4 +1,4 @@
-﻿namespace Indexed_DataStructures
+﻿namespace IndexedCollections
 {
     internal class Node<T>
     {
