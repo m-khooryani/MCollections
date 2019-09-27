@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Indexed_DataStructures
@@ -12,6 +13,7 @@ namespace Indexed_DataStructures
         {
             //ParallelTest();
             //Test2();
+            Benchmark();
             SortedDictionary<int, string> sd = new SortedDictionary<int, string>();
             sd.Add(1, "1");
             sd.Add(2, "2");
@@ -39,6 +41,29 @@ namespace Indexed_DataStructures
             dictionary.Add(1, "5");
             dictionary.Add(5, "1");
             dictionary.Add(1, "54");
+        }
+
+        private static void Benchmark()
+        {
+            HashSet<int> set = new HashSet<int>();
+            //IndexedDictionary<int, int> sd = new IndexedDictionary<int, int>(); // 820
+            SortedDictionary<int, int> sd = new SortedDictionary<int, int>(); // 324
+            //SortedList<int, int> sd = new SortedList<int, int>();
+            int n = 500 * 1000;
+            Random rand = new Random();
+            int max = 1000 * 1000;
+            while(set.Count < n)
+            {
+                set.Add(rand.Next(max));
+            }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach (int i in set)
+            {
+                    sd.Add(i, 0);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("SD: " + stopwatch.ElapsedMilliseconds);
         }
 
         private static void ParallelTest()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Indexed_DataStructures
 {
-    internal sealed class RedBlackTree<T> : ISelfBalanceTree<T>
+    internal class RedBlackTree<T> : ISelfBalanceTree<T>
     {
         internal Node<T> root;
         public IComparer<T> Comparer { get; private set; }
@@ -22,6 +22,7 @@ namespace Indexed_DataStructures
 
         public T Min => GetMin();
 
+        Node<T> ISelfBalanceTree<T>.root => root;
 
         private T GetMin()
         {
@@ -51,7 +52,7 @@ namespace Indexed_DataStructures
             return root.Item;
         }
 
-        public bool AddIfNotPresent(T item)
+        public virtual bool AddIfNotPresent(T item)
         {
             var y = nilInstance;
             var x = this.root;

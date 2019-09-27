@@ -13,6 +13,8 @@ namespace Indexed_DataStructures
         Node<T> Search(T item);
         void Clear();
         IComparer<T> Comparer { get; }
+        Node<T> root { get; }
+
         bool Contains(T item);
         T GetByIndex(int index);
         void ExceptWith(IEnumerable<T> other);
