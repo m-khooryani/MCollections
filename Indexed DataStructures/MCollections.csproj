@@ -8,6 +8,9 @@
     <StartupObject />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>MKhooryani</Authors>
+    <RepositoryUrl>https://github.com/m-khooryani/MCollections</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/m-khooryani/MCollections</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
