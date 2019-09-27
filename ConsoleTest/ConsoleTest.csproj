@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Indexed DataStructures\MCollections.csproj" />
+    <ProjectReference Include="..\MCollections\MCollections.csproj" />
   </ItemGroup>
 
 </Project>
