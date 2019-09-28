@@ -5,7 +5,7 @@ in .NET, two data structures are useful when you need data to be sorted:
 * [SortedDictionary<TKey,TValue>](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.sorteddictionary-2?view=netframework-4.8) insert, edit, remove, search are in O(lg(N)), and index lookup is not supported.
 
 
-MCollections provided two data structure with insert, edit, remove, search and index lookup In O(Lg(N))
+MCollections provided two collections with insert, edit, remove, search and index lookup In O(Lg(N)). 
 
 download using NuGet: [MCollections](https://www.nuget.org/packages/MCollections/1.0.0)
 
