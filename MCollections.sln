@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject", "XUnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{462DAA77-0F2C-4479-A0A6-2140D620AED6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCollections", "MCollections\MCollections.csproj", "{FA9A5456-9F95-4D59-A786-B2A290B9E564}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCollections", "MCollections\MCollections.csproj", "{0E35C201-5968-48EE-BC81-85ACAE701E06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{462DAA77-0F2C-4479-A0A6-2140D620AED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{462DAA77-0F2C-4479-A0A6-2140D620AED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{462DAA77-0F2C-4479-A0A6-2140D620AED6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA9A5456-9F95-4D59-A786-B2A290B9E564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA9A5456-9F95-4D59-A786-B2A290B9E564}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA9A5456-9F95-4D59-A786-B2A290B9E564}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA9A5456-9F95-4D59-A786-B2A290B9E564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E35C201-5968-48EE-BC81-85ACAE701E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E35C201-5968-48EE-BC81-85ACAE701E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E35C201-5968-48EE-BC81-85ACAE701E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E35C201-5968-48EE-BC81-85ACAE701E06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

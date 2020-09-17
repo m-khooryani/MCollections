@@ -29,7 +29,7 @@ namespace MCollections
             get
             {
                 var node = this.tree.Search(new KeyValuePair<TKey, TValue>(key, default));
-                if(node == null)
+                if (node == null)
                 {
                     return default;
                 }

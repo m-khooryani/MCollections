@@ -115,7 +115,7 @@ namespace MCollections
             }
             int num = index;
             int c = 0;
-            foreach(T t in this)
+            foreach (T t in this)
             {
                 if (c >= count)
                 {
