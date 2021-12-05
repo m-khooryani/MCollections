@@ -9,7 +9,7 @@ namespace MCollections
     [DebuggerTypeProxy(typeof(CollectionDebugView<>)), DebuggerDisplay("Count = {Count}")]
     public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>
     {
-        internal readonly ISelfBalanceTree<T> tree;
+        internal readonly RedBlackTree<T> tree;
 
         public IndexedSet()
         {
@@ -57,6 +57,10 @@ namespace MCollections
             get
             {
                 return this.tree.GetByIndex(index);
+            }
+            set
+            {
+                this.tree.SetByIndex(index, value);
             }
         }
 

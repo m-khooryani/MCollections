@@ -137,6 +137,28 @@ namespace MCollections
                 }
             }
         }
+		
+        public T SetByIndex(int index, T value)
+        {
+            Node<T> node = this.root;
+            while (true)
+            {
+                if (index < node.Left.Count)
+                {
+                    node = node.Left;
+                }
+                else if (index > node.Left.Count)
+                {
+                    index -= node.Left.Count + 1;
+                    node = node.Right;
+                }
+                else
+                {
+					node.Item = value;
+                    return node.Item;
+                }
+            }
+        }
 
         private void Balance(Node<T> z)
         {
