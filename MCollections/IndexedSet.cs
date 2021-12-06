@@ -16,6 +16,16 @@ namespace MCollections
             this.tree = new RedBlackTree<T>(Comparer<T>.Default);
         }
 
+        public IndexedSet(IEnumerable<T> enumerable)
+        {
+            this.tree = new RedBlackTree<T>(Comparer<T>.Default);
+            foreach(var element in enumerable)
+            {
+                if (this.tree.AddIfNotPresent(element) == false)
+                    System.Console.WriteLine("Failed to add enumerable element"+element+" to IndexedSet");
+            }
+        }
+
         public IndexedSet(IComparer<T> comparer)
         {
             this.tree = new RedBlackTree<T>(comparer);
