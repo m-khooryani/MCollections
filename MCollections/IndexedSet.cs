@@ -16,7 +16,14 @@ namespace MCollections
             this.tree = new RedBlackTree<T>(Comparer<T>.Default);
         }
 
-        public IndexedSet(IEnumerable<T> enumerable)
+        /// <summary>
+        /// Initialize IndexSet with values from IEmumerable<typeparamref name="T"/> ) (Almost Equivalant to: new Var IndexedSet = IndexedSet();  UnionWith(enumerable);)
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="FakeParam"></param>
+#pragma warning disable IDE0060 // Remove unused parameter
+        public IndexedSet(IEnumerable<T> enumerable, ref bool FakeParam)//Second unneeded parameter to separate initialize in case of conflicting(or IEnumerable that also is derived from IComparer) variable types
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             this.tree = new RedBlackTree<T>(Comparer<T>.Default);
             foreach(var element in enumerable)
