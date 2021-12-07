@@ -17,7 +17,7 @@ namespace MCollections
         }
 
         /// <summary>
-        /// Initialize IndexSet with values from IEmumerable<typeparamref name="T"/> ) (Almost Equivalant to: new Var IndexedSet = IndexedSet();  UnionWith(enumerable);)
+        /// Initialize IndexSet with values from IEmumerable<typeparamref name="T"/> ) (Equivalant to(except for null check): new Var IndexedSet = IndexedSet();  UnionWith(enumerable);)
         /// </summary>
         /// <param name="enumerable"></param>
         /// <param name="FakeParam"></param>

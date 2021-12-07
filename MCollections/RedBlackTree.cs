@@ -137,7 +137,7 @@ namespace MCollections
                 }
             }
         }
-		
+        
         public T SetByIndex(int index, T value)
         {
             Node<T> node = this.root;
@@ -154,7 +154,7 @@ namespace MCollections
                 }
                 else
                 {
-					node.Item = value;
+                    node.Item = value;
                     return node.Item;
                 }
             }
