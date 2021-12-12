@@ -9,7 +9,7 @@ namespace MCollections
     [DebuggerDisplay("Count = {Count}"), DebuggerTypeProxy(typeof(DictionaryDebugView<,>))]
     public partial class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
-        internal readonly ISelfBalanceTree<KeyValuePair<TKey, TValue>> tree;
+        internal readonly NonDuplicateRedBlackTree<KeyValuePair<TKey, TValue>> tree;
         private KeyCollection _keys;
         private object syncRoot;
         private ValueCollection _values;
@@ -107,6 +107,10 @@ namespace MCollections
         ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
 
         public int Count => tree.Count;
+
+        public bool IsEmpty => tree.IsEmpty();
+
+        public bool IsNotEmpty => tree.IsNotEmpty();
 
         public bool IsReadOnly => false;
 

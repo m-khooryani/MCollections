@@ -81,6 +81,10 @@ namespace MCollections
             }
         }
 
+        public bool IsEmpty => tree.IsEmpty();
+
+        public bool IsNotEmpty => tree.IsNotEmpty();
+
         public IEnumerator<T> GetEnumerator()
         {
             return this.tree.InOrder();
