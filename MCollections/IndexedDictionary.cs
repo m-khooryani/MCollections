@@ -129,6 +129,25 @@ namespace MCollections
             this.tree.AddIfNotPresent(new KeyValuePair<TKey, TValue>(key, value));
         }
 
+        /// <summary>
+        /// Either Adds or updates the value of the key(Same as Set parameter of property this[TKey key])
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void AddOrUpdate(TKey key, TValue value)
+        {
+            KeyValuePair<TKey, TValue> item = new KeyValuePair<TKey, TValue>(key, value);
+            var node = this.tree.Search(item);
+            if (node == null)
+            {
+                this.tree.AddIfNotPresent(item);
+            }
+            else
+            {
+                node.Item = item;
+            }
+        }
+
         public void Clear()
         {
             tree.Clear();
