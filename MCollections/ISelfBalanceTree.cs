@@ -17,6 +17,9 @@ namespace MCollections
 
         bool Contains(T item);
         T GetByIndex(int index);
+
+        T SetByIndex(int index, T value);
+
         void ExceptWith(IEnumerable<T> other);
         void IntersectWith(IEnumerable<T> other);
         bool IsProperSubsetOf(IEnumerable<T> other);

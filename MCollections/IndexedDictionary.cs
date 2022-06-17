@@ -9,7 +9,7 @@ namespace MCollections
     [DebuggerDisplay("Count = {Count}"), DebuggerTypeProxy(typeof(DictionaryDebugView<,>))]
     public partial class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
-        internal readonly ISelfBalanceTree<KeyValuePair<TKey, TValue>> tree;
+        internal readonly NonDuplicateRedBlackTree<KeyValuePair<TKey, TValue>> tree;
         private KeyCollection _keys;
         private object syncRoot;
         private ValueCollection _values;
@@ -108,6 +108,10 @@ namespace MCollections
 
         public int Count => tree.Count;
 
+        public bool IsEmpty => tree.IsEmpty();
+
+        public bool IsNotEmpty => tree.IsNotEmpty();
+
         public bool IsReadOnly => false;
 
         public bool IsFixedSize => false;
@@ -123,6 +127,25 @@ namespace MCollections
         public void Add(TKey key, TValue value)
         {
             this.tree.AddIfNotPresent(new KeyValuePair<TKey, TValue>(key, value));
+        }
+
+        /// <summary>
+        /// Either Adds or updates the value of the key(Same as Set parameter of property this[TKey key])
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void AddOrUpdate(TKey key, TValue value)
+        {
+            KeyValuePair<TKey, TValue> item = new KeyValuePair<TKey, TValue>(key, value);
+            var node = this.tree.Search(item);
+            if (node == null)
+            {
+                this.tree.AddIfNotPresent(item);
+            }
+            else
+            {
+                node.Item = item;
+            }
         }
 
         public void Clear()

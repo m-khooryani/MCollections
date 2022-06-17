@@ -137,6 +137,50 @@ namespace MCollections
                 }
             }
         }
+        
+        public T SetByIndex(int index, T value)
+        {
+            Node<T> node = this.root;
+            while (true)
+            {
+                if (index < node.Left.Count)
+                {
+                    node = node.Left;
+                }
+                else if (index > node.Left.Count)
+                {
+                    index -= node.Left.Count + 1;
+                    node = node.Right;
+                }
+                else
+                {
+                    node.Item = value;
+                    return node.Item;
+                }
+            }
+        }
+
+        //Rough IsEmpty method for Tree
+        public bool IsEmpty()
+        {
+            if (this.root == null)
+                return true;
+            if (this.root.Count == 0)
+                return true;
+            else
+                return false;
+        }
+
+        //Rough Inverted version IsEmpty method for Tree(for cases when want to use !IsEmpty() to reduce number of instructions by 1)
+        public bool IsNotEmpty()
+        {
+            if (this.root == null)//Assume is zero count in this case
+                return false;
+            if (this.root.Count == 0)
+                return false;
+            else
+                return true;
+        }
 
         private void Balance(Node<T> z)
         {

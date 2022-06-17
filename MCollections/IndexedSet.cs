@@ -9,11 +9,28 @@ namespace MCollections
     [DebuggerTypeProxy(typeof(CollectionDebugView<>)), DebuggerDisplay("Count = {Count}")]
     public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>
     {
-        internal readonly ISelfBalanceTree<T> tree;
+        internal readonly RedBlackTree<T> tree;
 
         public IndexedSet()
         {
             this.tree = new RedBlackTree<T>(Comparer<T>.Default);
+        }
+
+        /// <summary>
+        /// Initialize IndexSet with values from IEmumerable<typeparamref name="T"/> ) (Equivalant to(except for null check and console messages on failed adds): new Var IndexedSet = IndexedSet();  UnionWith(enumerable);)
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="FakeParam"></param>
+#pragma warning disable IDE0060 // Remove unused parameter
+        public IndexedSet(IEnumerable<T> enumerable, ref bool FakeParam)//Second unneeded parameter to separate initialize in case of conflicting(or IEnumerable that also is derived from IComparer) variable types
+#pragma warning restore IDE0060 // Remove unused parameter
+        {
+            this.tree = new RedBlackTree<T>(Comparer<T>.Default);
+            foreach(var element in enumerable)
+            {
+                if (this.tree.AddIfNotPresent(element) == false)
+                    System.Console.WriteLine("Failed to add enumerable element"+element+" to IndexedSet");
+            }
         }
 
         public IndexedSet(IComparer<T> comparer)
@@ -58,7 +75,15 @@ namespace MCollections
             {
                 return this.tree.GetByIndex(index);
             }
+            set
+            {
+                this.tree.SetByIndex(index, value);
+            }
         }
+
+        public bool IsEmpty => tree.IsEmpty();
+
+        public bool IsNotEmpty => tree.IsNotEmpty();
 
         public IEnumerator<T> GetEnumerator()
         {
