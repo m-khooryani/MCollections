@@ -715,4 +715,30 @@ internal class RedBlackTree<T> : ISelfBalanceTree<T>
         }
         return null;
     }
+
+    public int IndexOfKey(T key)
+    {
+        Node<T> node = this.root;
+        int compare;
+        var idx = 0;
+        while (!node.IsNil())
+        {
+            compare = this.Comparer.Compare(key, node.Item);
+            if (compare < 0)
+            {
+                node = node.Left;
+            }
+            else if (compare > 0)
+            {
+                idx += node.Left.Count + 1;
+                node = node.Right;
+            }
+            else
+            {
+                idx += node.Left.Count;
+                return idx;
+            }
+        }
+        return -1;
+    }
 }

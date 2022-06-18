@@ -17,6 +17,7 @@ internal interface ISelfBalanceTree<T>
 
     bool Contains(T item);
     T GetByIndex(int index);
+    int IndexOfKey(T key);
     void ExceptWith(IEnumerable<T> other);
     void IntersectWith(IEnumerable<T> other);
     bool IsProperSubsetOf(IEnumerable<T> other);

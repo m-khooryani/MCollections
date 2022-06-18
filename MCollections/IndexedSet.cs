@@ -209,6 +209,11 @@ public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerabl
         }
     }
 
+    public int IndexOfKey(T key)
+    {
+        return tree.IndexOfKey(key);
+    }
+
     bool ICollection.IsSynchronized
     {
         get

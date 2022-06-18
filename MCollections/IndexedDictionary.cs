@@ -346,4 +346,9 @@ public partial class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
             return this.syncRoot;
         }
     }
+
+    public int IndexOfKey(TKey key)
+    {
+        return tree.IndexOfKey(new KeyValuePair<TKey, TValue>(key, default));
+    }
 }
