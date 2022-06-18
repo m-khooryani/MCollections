@@ -1,7 +1,6 @@
-﻿namespace MCollections
+﻿namespace MCollections;
+
+class NilNode<T> : Node<T>
 {
-    class NilNode<T> : Node<T>
-    {
-        internal override bool IsNil() => true;
-    }
+    internal override bool IsNil() => true;
 }

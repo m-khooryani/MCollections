@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace MCollections
+namespace MCollections;
+
+internal sealed class DictionaryDebugView<TKey, TValue>
 {
-    internal sealed class DictionaryDebugView<TKey, TValue>
+    private readonly IDictionary<TKey, TValue> dictionary;
+
+    public DictionaryDebugView(IDictionary<TKey, TValue> dictionary)
     {
-        private readonly IDictionary<TKey, TValue> dictionary;
+        this.dictionary = dictionary ?? throw new ArgumentNullException("dictionary");
+    }
 
-        public DictionaryDebugView(IDictionary<TKey, TValue> dictionary)
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public KeyValuePair<TKey, TValue>[] Items
+    {
+        get
         {
-            this.dictionary = dictionary ?? throw new ArgumentNullException("dictionary");
-        }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public KeyValuePair<TKey, TValue>[] Items
-        {
-            get
-            {
-                KeyValuePair<TKey, TValue>[] array = new KeyValuePair<TKey, TValue>[this.dictionary.Count];
-                this.dictionary.CopyTo(array, 0);
-                return array;
-            }
+            KeyValuePair<TKey, TValue>[] array = new KeyValuePair<TKey, TValue>[this.dictionary.Count];
+            this.dictionary.CopyTo(array, 0);
+            return array;
         }
     }
 }
