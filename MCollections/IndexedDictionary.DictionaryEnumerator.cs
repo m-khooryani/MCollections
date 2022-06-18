@@ -1,82 +1,81 @@
 ﻿using System;
 using System.Collections;
 
-namespace MCollections
+namespace MCollections;
+
+public partial class IndexedDictionary<TKey, TValue>
 {
-    public partial class IndexedDictionary<TKey, TValue>
+    private class DictionaryEnumerator : IDictionaryEnumerator
     {
-        private class DictionaryEnumerator : IDictionaryEnumerator
+        private readonly DictionaryEntry[] items;
+        private int index = -1;
+
+        public DictionaryEnumerator(IndexedDictionary<TKey, TValue> dictionary)
         {
-            private readonly DictionaryEntry[] items;
-            private int index = -1;
-
-            public DictionaryEnumerator(IndexedDictionary<TKey, TValue> dictionary)
+            items = new DictionaryEntry[dictionary.Count];
+            int index = 0;
+            foreach (var item in dictionary)
             {
-                items = new DictionaryEntry[dictionary.Count];
-                int index = 0;
-                foreach (var item in dictionary)
-                {
-                    items[index++] = new DictionaryEntry(item.Key, item.Value);
-                }
+                items[index++] = new DictionaryEntry(item.Key, item.Value);
             }
+        }
 
-            public object Current
+        public object Current
+        {
+            get
             {
-                get
-                {
-                    ValidateIndex();
-                    return items[index];
-                }
+                ValidateIndex();
+                return items[index];
             }
+        }
 
-            public DictionaryEntry Entry
+        public DictionaryEntry Entry
+        {
+            get
             {
-                get
-                {
-                    return (DictionaryEntry)Current;
-                }
+                return (DictionaryEntry)Current;
             }
+        }
 
-            public object Key
+        public object Key
+        {
+            get
             {
-                get
-                {
-                    ValidateIndex();
-                    return items[index].Key;
-                }
+                ValidateIndex();
+                return items[index].Key;
             }
+        }
 
-            public object Value
+        public object Value
+        {
+            get
             {
-                get
-                {
-                    ValidateIndex();
-                    return items[index].Value;
-                }
+                ValidateIndex();
+                return items[index].Value;
             }
+        }
 
-            public bool MoveNext()
+        public bool MoveNext()
+        {
+            if (index < items.Length - 1)
             {
-                if (index < items.Length - 1)
-                {
-                    index++;
-                    return true;
-                }
-                return false;
+                index++;
+                return true;
             }
+            return false;
+        }
 
-            private void ValidateIndex()
+        private void ValidateIndex()
+        {
+            if (index < 0 || index >= items.Length)
             {
-                if (index < 0 || index >= items.Length)
-                {
-                    throw new InvalidOperationException("Enumerator is before or after the collection.");
-                }
+                throw new InvalidOperationException("Enumerator is before or after the collection.");
             }
+        }
 
-            public void Reset()
-            {
-                index = -1;
-            }
+        public void Reset()
+        {
+            index = -1;
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace MCollections
+﻿namespace MCollections;
+
+internal enum Color : byte
 {
-    internal enum Color : byte
-    {
-        BLACK = 0,
-        RED = 1,
-    }
+    BLACK = 0,
+    RED = 1,
 }

@@ -4,217 +4,216 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace MCollections
+namespace MCollections;
+
+[DebuggerTypeProxy(typeof(CollectionDebugView<>)), DebuggerDisplay("Count = {Count}")]
+public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>
 {
-    [DebuggerTypeProxy(typeof(CollectionDebugView<>)), DebuggerDisplay("Count = {Count}")]
-    public class IndexedSet<T> : ISet<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>
+    internal readonly ISelfBalanceTree<T> tree;
+
+    public IndexedSet()
     {
-        internal readonly ISelfBalanceTree<T> tree;
+        this.tree = new RedBlackTree<T>(Comparer<T>.Default);
+    }
 
-        public IndexedSet()
+    public IndexedSet(IComparer<T> comparer)
+    {
+        this.tree = new RedBlackTree<T>(comparer);
+    }
+
+    public int Count => this.tree.Count;
+
+    public bool IsReadOnly => false;
+
+    private object syncRoot;
+    object ICollection.SyncRoot
+    {
+        get
         {
-            this.tree = new RedBlackTree<T>(Comparer<T>.Default);
-        }
-
-        public IndexedSet(IComparer<T> comparer)
-        {
-            this.tree = new RedBlackTree<T>(comparer);
-        }
-
-        public int Count => this.tree.Count;
-
-        public bool IsReadOnly => false;
-
-        private object syncRoot;
-        object ICollection.SyncRoot
-        {
-            get
+            if (this.syncRoot == null)
             {
-                if (this.syncRoot == null)
-                {
-                    Interlocked.CompareExchange(ref this.syncRoot, new object(), null);
-                }
-                return this.syncRoot;
+                Interlocked.CompareExchange(ref this.syncRoot, new object(), null);
             }
+            return this.syncRoot;
         }
+    }
 
-        public T Max => tree.Max;
+    public T Max => tree.Max;
 
-        public T Min => tree.Min;
+    public T Min => tree.Min;
 
-        public bool Add(T item)
+    public bool Add(T item)
+    {
+        return this.tree.AddIfNotPresent(item);
+    }
+
+    public bool Remove(T item)
+    {
+        return this.tree.Remove(item);
+    }
+
+    public T this[int index]
+    {
+        get
         {
-            return this.tree.AddIfNotPresent(item);
+            return this.tree.GetByIndex(index);
         }
+    }
 
-        public bool Remove(T item)
+    public IEnumerator<T> GetEnumerator()
+    {
+        return this.tree.InOrder();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.tree.InOrder();
+    }
+
+    void ICollection<T>.Add(T item)
+    {
+        this.Add(item);
+    }
+
+    public void Clear()
+    {
+        this.tree.Clear();
+    }
+
+    public bool Contains(T item)
+    {
+        return tree.Contains(item);
+    }
+
+    public void CopyTo(T[] array)
+    {
+        this.CopyTo(array, 0, this.Count);
+    }
+
+    public void CopyTo(T[] array, int index)
+    {
+        this.CopyTo(array, index, this.Count);
+    }
+
+    public void CopyTo(T[] array, int index, int count)
+    {
+        if (array == null)
         {
-            return this.tree.Remove(item);
+            throw new ArgumentNullException("array");
         }
-
-        public T this[int index]
+        if (index < 0)
         {
-            get
+            throw new ArgumentOutOfRangeException("index");
+        }
+        if (count < 0)
+        {
+            throw new ArgumentOutOfRangeException("count");
+        }
+        if (count > (array.Length - index))
+        {
+            throw new ArgumentException();
+        }
+        int num = index;
+        int c = 0;
+        foreach (T t in this)
+        {
+            if (c >= count)
             {
-                return this.tree.GetByIndex(index);
+                break;
             }
+            c++;
+            array[num++] = t;
         }
+    }
 
-        public IEnumerator<T> GetEnumerator()
+    bool ICollection<T>.IsReadOnly
+    {
+        get
         {
-            return this.tree.InOrder();
+            return false;
         }
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
+    public void ExceptWith(IEnumerable<T> other)
+    {
+        this.tree.ExceptWith(other);
+    }
+
+    public void IntersectWith(IEnumerable<T> other)
+    {
+        this.tree.IntersectWith(other);
+    }
+
+    public bool IsProperSubsetOf(IEnumerable<T> other)
+    {
+        return this.tree.IsProperSubsetOf(other);
+    }
+
+    public bool IsProperSupersetOf(IEnumerable<T> other)
+    {
+        return this.tree.IsProperSupersetOf(other);
+    }
+
+    public bool IsSubsetOf(IEnumerable<T> other)
+    {
+        return this.tree.IsSubsetOf(other);
+    }
+
+    public bool IsSupersetOf(IEnumerable<T> other)
+    {
+        return this.tree.IsSuperSetOf(other);
+    }
+
+    public bool Overlaps(IEnumerable<T> other)
+    {
+        return this.tree.Overlaps(other);
+    }
+
+    public bool SetEquals(IEnumerable<T> other)
+    {
+        return this.tree.SetEquals(other);
+    }
+
+    public void SymmetricExceptWith(IEnumerable<T> other)
+    {
+        this.tree.SymmetricExceptWith(other);
+    }
+
+    public void UnionWith(IEnumerable<T> other)
+    {
+        this.tree.UnionWith(other);
+    }
+
+    void ICollection.CopyTo(Array array, int index)
+    {
+        if (array == null)
         {
-            return this.tree.InOrder();
+            throw new ArgumentNullException("array");
         }
-
-        void ICollection<T>.Add(T item)
+        if (index < 0)
         {
-            this.Add(item);
+            throw new ArgumentOutOfRangeException("index");
         }
-
-        public void Clear()
+        if (array is T[] localArray)
         {
-            this.tree.Clear();
+            this.CopyTo(localArray, index);
         }
-
-        public bool Contains(T item)
+        else
         {
-            return tree.Contains(item);
-        }
-
-        public void CopyTo(T[] array)
-        {
-            this.CopyTo(array, 0, this.Count);
-        }
-
-        public void CopyTo(T[] array, int index)
-        {
-            this.CopyTo(array, index, this.Count);
-        }
-
-        public void CopyTo(T[] array, int index, int count)
-        {
-            if (array == null)
-            {
-                throw new ArgumentNullException("array");
-            }
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException("index");
-            }
-            if (count < 0)
-            {
-                throw new ArgumentOutOfRangeException("count");
-            }
-            if (count > (array.Length - index))
-            {
-                throw new ArgumentException();
-            }
+            object[] objects = array as object[];
             int num = index;
-            int c = 0;
             foreach (T t in this)
             {
-                if (c >= count)
-                {
-                    break;
-                }
-                c++;
-                array[num++] = t;
+                objects[num++] = t;
             }
         }
+    }
 
-        bool ICollection<T>.IsReadOnly
+    bool ICollection.IsSynchronized
+    {
+        get
         {
-            get
-            {
-                return false;
-            }
-        }
-
-        public void ExceptWith(IEnumerable<T> other)
-        {
-            this.tree.ExceptWith(other);
-        }
-
-        public void IntersectWith(IEnumerable<T> other)
-        {
-            this.tree.IntersectWith(other);
-        }
-
-        public bool IsProperSubsetOf(IEnumerable<T> other)
-        {
-            return this.tree.IsProperSubsetOf(other);
-        }
-
-        public bool IsProperSupersetOf(IEnumerable<T> other)
-        {
-            return this.tree.IsProperSupersetOf(other);
-        }
-
-        public bool IsSubsetOf(IEnumerable<T> other)
-        {
-            return this.tree.IsSubsetOf(other);
-        }
-
-        public bool IsSupersetOf(IEnumerable<T> other)
-        {
-            return this.tree.IsSuperSetOf(other);
-        }
-
-        public bool Overlaps(IEnumerable<T> other)
-        {
-            return this.tree.Overlaps(other);
-        }
-
-        public bool SetEquals(IEnumerable<T> other)
-        {
-            return this.tree.SetEquals(other);
-        }
-
-        public void SymmetricExceptWith(IEnumerable<T> other)
-        {
-            this.tree.SymmetricExceptWith(other);
-        }
-
-        public void UnionWith(IEnumerable<T> other)
-        {
-            this.tree.UnionWith(other);
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            if (array == null)
-            {
-                throw new ArgumentNullException("array");
-            }
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException("index");
-            }
-            if (array is T[] localArray)
-            {
-                this.CopyTo(localArray, index);
-            }
-            else
-            {
-                object[] objects = array as object[];
-                int num = index;
-                foreach (T t in this)
-                {
-                    objects[num++] = t;
-                }
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
